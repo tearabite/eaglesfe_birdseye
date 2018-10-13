@@ -9,7 +9,6 @@ function clamp(num, min, max) {
 
 var field = document.querySelector('#fieldDiv');
 var robot = new robot(document.querySelector('#robotDiv'));
-robot.setPosition(0,0);
 
 dragElement(robot);
 
