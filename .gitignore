@@ -1,1 +1,2 @@
-models/*
+client/models
+node_modules

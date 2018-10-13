@@ -1,3 +1,17 @@
+var ws = new WebSocket('ws://localhost:40510')
+ws.name = 'client';
+// event emmited when connected
+ws.onopen = function () {
+    console.log('Bird\'s Eye is Watching...');
+};
+
+var pos;
+// event emmited when receiving message 
+ws.onmessage = function (ev) {
+    console.log(ev);
+    pos = JSON.parse(ev.data);
+};
+
 function loadFile(filePath) {
     var result = null;
     var xmlhttp = new XMLHttpRequest();
@@ -10,7 +24,6 @@ function loadFile(filePath) {
   }
 
 content = JSON.parse(loadFile("sample.json"));
-console.log(content);
 
 // Basic Scene Setup
 var scene = new THREE.Scene();
@@ -139,18 +152,16 @@ fieldParts.forEach(part => addPartToScene(part));
 var axesHelper = new THREE.AxesHelper( 200 );
 scene.add( axesHelper );
 
-var index = undefined;
 function animate() {
     requestAnimationFrame( animate );
     
     controls.update();
-    const pos = (content && index !== undefined) ? content[index] : undefined;
     if (pos !== undefined) {
-        robot.position.set(pos.x, pos.y, pos.z + 9.5);
-        const pitch = THREE.Math.degToRad(pos.pitch);
-        const roll = THREE.Math.degToRad(pos.roll);
-        const heading = THREE.Math.degToRad(pos.heading);
-        robot.rotation.setFromVector3(new THREE.Vector3(roll, pitch, heading));
+        robot.position.set(pos.x, -pos.y, 9.5);
+        // const pitch = THREE.Math.degToRad(pos.pitch);
+        // const roll = THREE.Math.degToRad(pos.roll);
+        // const heading = THREE.Math.degToRad(pos.heading);
+        // robot.rotation.setFromVector3(new THREE.Vector3(roll, pitch, heading));
     }
     
 	renderer.render( scene, camera );
