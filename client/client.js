@@ -1,5 +1,4 @@
-var ws = new WebSocket('ws://localhost:40510')
-ws.name = 'client';
+var ws = new WebSocket('ws://localhost:40510');
 // event emmited when connected
 ws.onopen = function () {
     console.log('Bird\'s Eye is Watching...');
@@ -11,19 +10,6 @@ ws.onmessage = function (ev) {
     console.log(ev);
     pos = JSON.parse(ev.data);
 };
-
-function loadFile(filePath) {
-    var result = null;
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.open("GET", filePath, false);
-    xmlhttp.send();
-    if (xmlhttp.status==200) {
-      result = xmlhttp.responseText;
-    }
-    return result;
-  }
-
-content = JSON.parse(loadFile("sample.json"));
 
 // Basic Scene Setup
 var scene = new THREE.Scene();

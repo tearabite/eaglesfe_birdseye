@@ -1,59 +1,99 @@
 var ws = new WebSocket('ws://localhost:40510?name=producer');
-ws.name = 'producer';
-// event emmited when connected
 ws.onopen = function () {
-    console.log('websocket is connected ...');
+    console.log('Connected to websocket...');
 };
 
-// event emmited when receiving message 
-ws.onmessage = function (ev) {
-};
+function clamp(num, min, max) {
+    return num <= min ? min : num >= max ? max : num;
+}
 
-dragElement(document.querySelector('#robotDiv'));
+var field = document.querySelector('#fieldDiv');
+var robot = new robot(document.querySelector('#robotDiv'));
+robot.setPosition(0,0);
 
-function dragElement(elmnt) {
-    var pos1 = 0,
-        pos2 = 0,
-        startX = 0,
-        startY = 0;
-    elmnt.onmousedown = dragMouseDown;
+dragElement(robot);
+
+function dragElement(robot) {
+    var x = 0, y = 0, prevX = 0, prevY = 0;
+    robot.element.onmousedown = dragMouseDown;
 
     function dragMouseDown(e) {
         e = e || window.event;
         e.preventDefault();
-        // get the mouse cursor position at startup:
-        startX = e.clientX;
-        startY = e.clientY;
+
+        prevX = e.clientX;
+        prevY = e.clientY;
+
         document.onmouseup = closeDragElement;
-        // call a function whenever the cursor moves:
         document.onmousemove = elementDrag;
     }
 
     function elementDrag(e) {
         e = e || window.event;
         e.preventDefault();
-        // calculate the new cursor position:
-        pos1 = startX - e.clientX;
-        pos2 = startY - e.clientY;
-        startX = e.clientX;
-        startY = e.clientY;
-        // set the element's new position:
-        let top = Math.max(-18, Math.min(270, elmnt.offsetTop - pos2)) + (elmnt.offsetHeight / 2);
-        let left = Math.max(-18, Math.min(270, elmnt.offsetLeft - pos1)) + (elmnt.offsetWidth / 2);
-        elmnt.style.top = top - (elmnt.offsetHeight / 2) + "px";
-        elmnt.style.left = left - (elmnt.offsetWidth / 2) + "px";
-        var packet = {
-            x: (left / 2) - 72,
-            y: (top / 2) - 72
-        };
-        ws.send(JSON.stringify(packet));
-        console.log(packet);
+
+        x = e.clientX - prevX;
+        y = e.clientY - prevY;
+        prevX = e.clientX;
+        prevY = e.clientY;
+
+        robot.move(x, y);
+
+        transformedPosition = robot.getTransformedPosition();
+        ws.send(JSON.stringify(transformedPosition));
+        console.log(transformedPosition);
     }
 
     function closeDragElement() {
-        /* stop moving when mouse button is released:*/
         document.onmouseup = null;
         document.onmousemove = null;
     }
 }
 
+
+function robot(div) {
+    this.element = div;
+
+    const fieldSize = {
+        width: this.element.parentElement.offsetWidth,
+        height: this.element.parentElement.offsetHeight
+    };
+
+    const scale = fieldSize.width / 144;
+
+    const size = {
+        width: this.element.offsetWidth,
+        height: this.element.offsetHeight
+    };
+
+     const positionLimits = {
+        max: { x: (fieldSize.width - (size.width / 2)), y: (fieldSize.height - (size.height / 2)) },
+        min: { x: size.width / 2, y: size.height / 2}
+    };
+
+    this.move = (x, y) => {
+        const currentPosition = this.getPosition();
+        this.setPosition(currentPosition.x + x, currentPosition.y + y);
+    };
+
+    this.setPosition = (x, y) => {
+        x = clamp(x, positionLimits.min.x, positionLimits.max.x);
+        y = clamp(y, positionLimits.min.y, positionLimits.max.y);
+        this.element.style.left = (x - size.width / 2) + 'px';
+        this.element.style.top = (y - size.height / 2) + 'px';
+    };
+
+    this.getPosition = () => {
+        return {
+            x: this.element.offsetLeft + size.width / 2,
+            y: this.element.offsetTop + size.height / 2
+        };
+    };
+
+    this.getTransformedPosition = () => {
+        const position = this.getPosition();
+        return { 
+            x: (position.x / scale) - ((fieldSize.width / 2) / scale), 
+            y: (position.y / scale) - ((fieldSize.height / 2) / scale)};
+    };
+}

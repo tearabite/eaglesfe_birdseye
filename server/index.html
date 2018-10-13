@@ -8,24 +8,23 @@
                     background:red;
                     width:36px;
                     height:36px;
-                    top: 126px;
-                    left: 126px;
                 }
                 #fieldDiv {
                     position: absolute;
-                    border-width: 2px;
+                    outline-width: 2px;
                     background:white;
-                    border-color: black;
-                    border-style: solid;
+                    outline-color: black;
+                    outline-style: solid;
                     width:288px;
                     height:288px;
                 }
                 </style>
 	</head>
     <body>
-        <div id="fieldDiv"></div>
-        <div id="robotDiv"></div>
+        <div id="fieldDiv">
+            <div id="robotDiv"></div>
+        </div>
 
-        <script src="producer.js"></script>
+        <script src="server/producer.js"></script>
     </body>
 </html>
