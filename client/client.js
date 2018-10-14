@@ -7,16 +7,29 @@ ws.onmessage = (ev) => pos = JSON.parse(ev.data);
 // Basic Scene Setup
 var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.up = new THREE.Vector3(0,0,1);
+
 var renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setSize(window.innerWidth, window.innerHeight);
+camera.aspect = window.innerWidth / window.innerHeight;
+camera.position.set( 0, -185, 135 );
+
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 var controls = new THREE.OrbitControls( camera );
-camera.position.set( 0, -185, 135 );
+controls.zoomSpeed = 0.2;
+controls.maxPolarAngle = THREE.Math.degToRad(80);
+controls.minPolarAngle = THREE.Math.degToRad(0);
 controls.update();
 
 document.body.appendChild(renderer.domElement);
+
+window.addEventListener('resize', function () {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+  });
 
 // First, setup a plane so it doesn't look like the field is floating in space
 var geometry = new THREE.PlaneGeometry( 500, 500 );
@@ -32,28 +45,18 @@ scene.add( dLight );
 var hLight = new THREE.HemisphereLight();
 scene.add( hLight );
 
-spotLight = new THREE.SpotLight( 0xffffff, 1 );
-spotLight.position.set( -100, 100, 50 );
-spotLight.angle = Math.PI / 4;
+spotLight = new THREE.SpotLight( 0xddeeee, 1 );
+spotLight.position.set(0, 0, 150 );
+spotLight.angle = 1;
 spotLight.penumbra = 0.05;
 spotLight.decay = 2;
 spotLight.distance = 300;
 spotLight.castShadow = true;
 spotLight.shadow.camera.near = 10;
-spotLight.shadow.camera.far = 2000;
-
-spotLight2 = new THREE.SpotLight( 0xffffff, 1 );
-spotLight2.position.set( 100, 100, 50 );
-spotLight2.angle = Math.PI / 4;
-spotLight2.penumbra = 0.05;
-spotLight2.decay = 2;
-spotLight2.distance = 300;
-spotLight2.castShadow = true;
-spotLight2.shadow.camera.near = 10;
-spotLight2.shadow.camera.far = 2000;
+spotLight.shadow.camera.far = 200;
+spotLight.intensity = 0.5;
 
 scene.add( spotLight );
-scene.add( spotLight2 );
            
 var RobotMesh = function () {
     this.robotGeometry = new THREE.BoxBufferGeometry(18,18,18);
@@ -84,9 +87,6 @@ function animate() {
 }
 
 var robot = new RobotMesh();
+robot.position.set(30,-30, 9.5);
 scene.add(robot);
-
-spotLight.target = robot;
-spotLight2.target = robot;
-
 animate();
