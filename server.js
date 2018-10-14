@@ -31,7 +31,6 @@ socket.on('connection', function (ws, req) {
     if (req.url === '/?name=producer'){
         console.log('SERVER CONNECTED');
         ws.onmessage = function (message) {
-            console.log('received: %s', message);
             consumer.send(message.data);
         };
     } else {
