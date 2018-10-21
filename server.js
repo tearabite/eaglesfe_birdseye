@@ -3,17 +3,15 @@ var app = express();
 var WebSocketServer = require('ws').Server;
 var fs = require('fs');
 var path = require('path');
-
-const CLIENT_PATH = path.join(__dirname, 'client', 'index.html');
-const SERVER_PATH = path.join(__dirname, 'server', 'index.html');
+var url = require('url');
 
 app.get('*', function (req, res) {
-    if (req.url === '/server'){
-        res.sendfile(SERVER_PATH);
-    } else if (req.url === '/client') {
-        res.sendfile(CLIENT_PATH);
+    const query = url.parse(req.url);
+    const isFile = path.parse(query.path).ext !== '';
+    if (isFile) {
+        res.sendfile(path.join(__dirname, query.path));
     } else {
-        res.sendfile(path.join(__dirname, req.originalUrl));
+        res.sendfile(path.join(__dirname, query.path, 'index.html'));
     }
 });
 
@@ -31,7 +29,9 @@ socket.on('connection', function (ws, req) {
     if (req.url === '/?name=producer'){
         console.log('SERVER CONNECTED');
         ws.onmessage = function (message) {
-            consumer.send(message.data);
+            if (consumer) {
+                consumer.send(message.data);
+            }
         };
     } else {
         console.log('CLIENT CONNECTED');
