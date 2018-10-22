@@ -1,18 +1,4 @@
-var pos;
-
-// WebSocket Setup
-var ws;
-function connect() {
-    if (ws === undefined || ws.readyState !== 1) {
-        const address = `ws://${args.address}:${args.port}`;
-        console.log(`Attemptng to connect to client at ${address}...`);
-        ws = new WebSocket(address);
-        ws.onopen = () => console.log('Connected!');
-        ws.onmessage = (ev) => {
-            pos = JSON.parse(ev.data);
-        }
-    }
-}
+var telemetry;
 
 // Basic Scene Setup
 var scene = new THREE.Scene();
@@ -85,11 +71,11 @@ function animate() {
     requestAnimationFrame( animate );
 
     controls.update();
-    if (pos !== undefined) {
-        robot.position.set(pos.x, -pos.y, 9.5);
-        const pitch = THREE.Math.degToRad(pos.pitch);
-        const roll = THREE.Math.degToRad(pos.roll);
-        const heading = THREE.Math.degToRad(pos.heading);
+    if (telemetry !== undefined) {
+        robot.position.set(telemetry.x, -telemetry.y, 9.5);
+        const pitch = THREE.Math.degToRad(telemetry.pitch);
+        const roll = THREE.Math.degToRad(telemetry.roll);
+        const heading = THREE.Math.degToRad(telemetry.heading);
         robot.rotation.setFromVector3(new THREE.Vector3(roll, pitch, heading));
     }
 

@@ -1,13 +1,3 @@
-var ws;
-function connect() {
-    if (ws === undefined || ws.readyState !== 1) {
-        const address = `ws://localhost:${args.port}?name=producer`;
-        console.log(`Attemptng to connect to client at ${address}...`);
-        ws = new WebSocket(address);
-        ws.onopen = () => console.log('Connected!');
-    }
-}
-
 class Robot {
     constructor(div) {
         this.element = div;

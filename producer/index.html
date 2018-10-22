@@ -24,7 +24,8 @@
         <div id="fieldDiv">
             <div id="robotDiv"></div>
         </div>
-        <script>
+		<script>
+            var ws;
             var args;
             const Http = new XMLHttpRequest();
             new XMLHttpRequest()
@@ -34,12 +35,23 @@
                 if (Http.responseText) {
                     args = JSON.parse(Http.responseText);
                     if (args === undefined) {
-                        document.body.innerHTML = "ERROR: Is the application running?"
+                            document.body.innerHTML = "ERROR: Is the application running?"
                     }
                     connect();
                 }
             }
-        </script>
+            function connect() {
+                if (ws === undefined || ws.readyState !== 1) {
+                    const address = `ws://${args.address}:${args.port}?name=producer`;
+                    console.log(`Attemptng to connect to client at ${address}...`);
+                    ws = new WebSocket(address);
+                    ws.onopen = () => console.log('Connected!');
+                    ws.onmessage = (ev) => {
+                        telemetry = JSON.parse(ev.data);
+                    }
+                }
+            }
+		</script>
         <script src="producer.js"></script>
     </body>
 </html>
