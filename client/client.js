@@ -1,8 +1,19 @@
 // WebSocket Setup
-var ws = new WebSocket('ws://localhost:40510');
-ws.onopen = () => console.log('Bird\'s Eye is Watching...');
+var ws;
+function connect() {
+    if (ws === undefined || ws.readyState !== 1) {
+        const address = `ws://${args.address}:${args.port}`;
+        console.log(`Attemptng to connect to client at ${address}...`);
+        ws = new WebSocket(address);
+        ws.onopen = () => console.log('Connected!');
+        ws.onmessage = (ev) => {
+            pos = JSON.parse(ev.data);
+            console.log(pos);
+        }
+    }
+}
+
 var pos;
-ws.onmessage = (ev) => pos = JSON.parse(ev.data);
 
 // Basic Scene Setup
 var scene = new THREE.Scene();
@@ -57,7 +68,7 @@ spotLight.shadow.camera.far = 200;
 spotLight.intensity = 0.5;
 
 scene.add( spotLight );
-           
+
 var RobotMesh = function () {
     this.robotGeometry = new THREE.BoxBufferGeometry(18,18,18);
     this.robotMaterial = new THREE.MeshPhongMaterial({ color: 0x4080ff, dithering: true } );
@@ -73,16 +84,16 @@ fieldParts.forEach(part => addPartToScene(part, scene, field));
 
 function animate() {
     requestAnimationFrame( animate );
-    
+
     controls.update();
     if (pos !== undefined) {
         robot.position.set(pos.x, -pos.y, 9.5);
-        // const pitch = THREE.Math.degToRad(pos.pitch);
-        // const roll = THREE.Math.degToRad(pos.roll);
-        // const heading = THREE.Math.degToRad(pos.heading);
-        // robot.rotation.setFromVector3(new THREE.Vector3(roll, pitch, heading));
+        const pitch = THREE.Math.degToRad(pos.pitch);
+        const roll = THREE.Math.degToRad(pos.roll);
+        const heading = THREE.Math.degToRad(pos.heading);
+        robot.rotation.setFromVector3(new THREE.Vector3(roll, pitch, heading));
     }
-    
+
 	renderer.render( scene, camera );
 }
 

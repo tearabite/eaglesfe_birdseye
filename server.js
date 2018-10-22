@@ -1,40 +1,65 @@
+const args = require('yargs').argv
+
+if (args.mode === 'client' && args.server === undefined) {
+    throw new Error("Must specify an address to use as the server. This should be the IP address of the robot controller running BirdseyeServer.")
+}
+
+console.log(`Starting Birdseye in ${args.mode} mode...`);
+
 var express = require('express');
 var app = express();
 var WebSocketServer = require('ws').Server;
-var fs = require('fs');
 var path = require('path');
+var opn = require('opn');
 var url = require('url');
 
-app.get('*', function (req, res) {
-    const query = url.parse(req.url);
-    const isFile = path.parse(query.path).ext !== '';
-    if (isFile) {
-        res.sendfile(path.join(__dirname, query.path));
-    } else {
-        res.sendfile(path.join(__dirname, query.path, 'index.html'));
+// Start an HTTP server so we can access the relevant HTML frontend pages.
+app.get('*configuration', (req, res, next) => {
+    res.json(args);
+    res.end();
+});
+
+app.get('/', (req, res, next) => {
+    res.redirect('/client/')
+});
+
+app.get('/client/*', (req, res, next) => {
+    res.sendfile(path.join(__dirname, req.url));
+});
+
+args.http = 8080;
+app.listen(args.http, function () {
+    const clientUrl = `http:localhost:${args.http}`;
+    const producerUrl = `http:localhost:${args.http}/debug/`;
+    if (args.mode === 'debug') {
+        //opn(producerUrl);
     }
+    console.log(`Birdseye is now running. You can access it at '${clientUrl}/client/.`);
+    //opn(clientUrl);
 });
 
-app.listen(8081, function () {
-    console.log('Example app listening on port 8081!');
-});
+// If we're in debug mode, start a websocket server for the two apps to use.
+if (args.mode === 'debug') {
+    args.address = 'localhost';
+    app.get('/debug/*', (req, res, next) => {
+        res.sendfile(path.join(__dirname, req.url.replace('debug', 'producer')));
+    });
+
+    socket = new WebSocketServer({ port: args.port });
+    var client;
+    socket.on('connection', function (ws, req) {
+        if (req.url === '/?name=producer'){
+            console.log('DEBUG PRODUCER CONNECTED');
+            ws.onmessage = function (message) {
+                if (client) {
+                    client.send(message.data);
+                }
+            };
+        } else {
+            console.log('CLIENT CONNECTED');
+            client = ws;
+        }
+    });
+}
 
 
-socket = new WebSocketServer({
-    port: 40510,
-});
-
-var data = {};
-socket.on('connection', function (ws, req) {
-    if (req.url === '/?name=producer'){
-        console.log('SERVER CONNECTED');
-        ws.onmessage = function (message) {
-            if (consumer) {
-                consumer.send(message.data);
-            }
-        };
-    } else {
-        console.log('CLIENT CONNECTED');
-        consumer = ws;
-    }
-});

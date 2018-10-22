@@ -1,14 +1,65 @@
-var ws = new WebSocket('ws://localhost:40510?name=producer');
-ws.onopen = function () {
-    console.log('Connected to websocket...');
-};
+var ws;
+function connect() {
+    if (ws === undefined || ws.readyState !== 1) {
+        const address = `ws://localhost:${args.port}?name=producer`;
+        console.log(`Attemptng to connect to client at ${address}...`);
+        ws = new WebSocket(address);
+        ws.onopen = () => console.log('Connected!');
+    }
+}
 
-function clamp(num, min, max) {
-    return num <= min ? min : num >= max ? max : num;
+class Robot {
+    constructor(div) {
+        this.element = div;
+
+        const fieldSize = {
+            width: this.element.parentElement.offsetWidth,
+            height: this.element.parentElement.offsetHeight
+        };
+
+        const scale = fieldSize.width / 144;
+
+        const size = {
+            width: this.element.offsetWidth,
+            height: this.element.offsetHeight
+        };
+
+        const positionLimits = {
+            max: { x: (fieldSize.width - (size.width / 2)), y: (fieldSize.height - (size.height / 2)) },
+            min: { x: size.width / 2, y: size.height / 2 }
+        };
+
+        this.move = (x, y) => {
+            const currentPosition = this.getPosition();
+            this.setPosition(currentPosition.x + x, currentPosition.y + y);
+        };
+
+        this.setPosition = (x, y) => {
+            x = clamp(x, positionLimits.min.x, positionLimits.max.x);
+            y = clamp(y, positionLimits.min.y, positionLimits.max.y);
+            this.element.style.left = (x - size.width / 2) + 'px';
+            this.element.style.top = (y - size.height / 2) + 'px';
+        };
+
+        this.getPosition = () => {
+            return {
+                x: this.element.offsetLeft + size.width / 2,
+                y: this.element.offsetTop + size.height / 2
+            };
+        };
+
+        this.getTransformedPosition = () => {
+            const position = this.getPosition();
+            return {
+                x: (position.x / scale) - ((fieldSize.width / 2) / scale),
+                y: (position.y / scale) - ((fieldSize.height / 2) / scale)
+            };
+        };
+    }
 }
 
 var field = document.querySelector('#fieldDiv');
-var robot = new robot(document.querySelector('#robotDiv'));
+var robot = new Robot(document.querySelector('#robotDiv'));
 
 dragElement(robot);
 
@@ -49,50 +100,6 @@ function dragElement(robot) {
     }
 }
 
-
-function robot(div) {
-    this.element = div;
-
-    const fieldSize = {
-        width: this.element.parentElement.offsetWidth,
-        height: this.element.parentElement.offsetHeight
-    };
-
-    const scale = fieldSize.width / 144;
-
-    const size = {
-        width: this.element.offsetWidth,
-        height: this.element.offsetHeight
-    };
-
-     const positionLimits = {
-        max: { x: (fieldSize.width - (size.width / 2)), y: (fieldSize.height - (size.height / 2)) },
-        min: { x: size.width / 2, y: size.height / 2}
-    };
-
-    this.move = (x, y) => {
-        const currentPosition = this.getPosition();
-        this.setPosition(currentPosition.x + x, currentPosition.y + y);
-    };
-
-    this.setPosition = (x, y) => {
-        x = clamp(x, positionLimits.min.x, positionLimits.max.x);
-        y = clamp(y, positionLimits.min.y, positionLimits.max.y);
-        this.element.style.left = (x - size.width / 2) + 'px';
-        this.element.style.top = (y - size.height / 2) + 'px';
-    };
-
-    this.getPosition = () => {
-        return {
-            x: this.element.offsetLeft + size.width / 2,
-            y: this.element.offsetTop + size.height / 2
-        };
-    };
-
-    this.getTransformedPosition = () => {
-        const position = this.getPosition();
-        return { 
-            x: (position.x / scale) - ((fieldSize.width / 2) / scale), 
-            y: (position.y / scale) - ((fieldSize.height / 2) / scale)};
-    };
+function clamp(num, min, max) {
+    return num <= min ? min : num >= max ? max : num;
 }

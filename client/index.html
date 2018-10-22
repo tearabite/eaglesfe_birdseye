@@ -8,10 +8,26 @@
 		</style>
 	</head>
 	<body>
-    <script src="./scripts/three.js"></script>
+		<script>
+				var args;
+				const Http = new XMLHttpRequest();
+				new XMLHttpRequest()
+				Http.open("GET", 'configuration');
+				Http.send();
+				Http.onreadystatechange = (e) => {
+						if (Http.responseText) {
+								args = JSON.parse(Http.responseText);
+								if (args === undefined) {
+										document.body.innerHTML = "ERROR: Is the application running?"
+								}
+								connect();
+						}
+				}
+		</script>
+		<script src="./scripts/three.js"></script>
     <script src="./scripts/OrbitControls.js"></script>
 		<script src="./scripts/STLLoader.js"></script>
 		<script src="./models/parts_list.js"></script>
-    <script src="./client.js"></script>
-  </body>
+		<script src="./client.js"></script>
+	</body>
 </html>

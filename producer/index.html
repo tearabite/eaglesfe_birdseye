@@ -24,7 +24,22 @@
         <div id="fieldDiv">
             <div id="robotDiv"></div>
         </div>
-
-        <script src="producer/producer.js"></script>
+        <script>
+            var args;
+            const Http = new XMLHttpRequest();
+            new XMLHttpRequest()
+            Http.open("GET", 'configuration');
+            Http.send();
+            Http.onreadystatechange = (e) => {
+                if (Http.responseText) {
+                    args = JSON.parse(Http.responseText);
+                    if (args === undefined) {
+                        document.body.innerHTML = "ERROR: Is the application running?"
+                    }
+                    connect();
+                }
+            }
+        </script>
+        <script src="producer.js"></script>
     </body>
 </html>
