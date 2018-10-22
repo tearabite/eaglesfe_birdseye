@@ -1,3 +1,5 @@
+var pos;
+
 // WebSocket Setup
 var ws;
 function connect() {
@@ -8,12 +10,9 @@ function connect() {
         ws.onopen = () => console.log('Connected!');
         ws.onmessage = (ev) => {
             pos = JSON.parse(ev.data);
-            console.log(pos);
         }
     }
 }
-
-var pos;
 
 // Basic Scene Setup
 var scene = new THREE.Scene();

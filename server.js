@@ -1,10 +1,10 @@
 const args = require('yargs').argv
 
-if (args.mode === 'client' && args.server === undefined) {
+if (!args.debug && args.address === undefined) {
     throw new Error("Must specify an address to use as the server. This should be the IP address of the robot controller running BirdseyeServer.")
 }
 
-console.log(`Starting Birdseye in ${args.mode} mode...`);
+console.log(`Starting Birdseye in ${args.debug ? 'debug' : 'client'} mode...`);
 
 var express = require('express');
 var app = express();
@@ -31,15 +31,15 @@ args.http = 8080;
 app.listen(args.http, function () {
     const clientUrl = `http:localhost:${args.http}`;
     const producerUrl = `http:localhost:${args.http}/debug/`;
-    if (args.mode === 'debug') {
-        //opn(producerUrl);
+    if (args.debug) {
+        opn(producerUrl);
     }
     console.log(`Birdseye is now running. You can access it at '${clientUrl}/client/.`);
-    //opn(clientUrl);
+    opn(clientUrl);
 });
 
 // If we're in debug mode, start a websocket server for the two apps to use.
-if (args.mode === 'debug') {
+if (args.debug) {
     args.address = 'localhost';
     app.get('/debug/*', (req, res, next) => {
         res.sendfile(path.join(__dirname, req.url.replace('debug', 'producer')));

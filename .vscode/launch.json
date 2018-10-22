@@ -6,7 +6,7 @@
             "request": "launch",
             "name": "Host (Debug)",
             "program": "${workspaceFolder}/server.js",
-            "args": [ "--mode=debug", "--port=3708" ]
+            "args": [ "--debug", "--port=3708" ]
         },
         {
             "type": "node",
