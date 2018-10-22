@@ -72,7 +72,7 @@ function animate() {
 
     controls.update();
     if (telemetry !== undefined) {
-        robot.position.set(telemetry.x, -telemetry.y, 9.5);
+        robot.position.set(telemetry.x, telemetry.y, 9.5);
         const pitch = THREE.Math.degToRad(telemetry.pitch);
         const roll = THREE.Math.degToRad(telemetry.roll);
         const heading = THREE.Math.degToRad(telemetry.heading);

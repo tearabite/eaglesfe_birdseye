@@ -32,6 +32,7 @@
 					ws.onopen = () => console.log('Connected!');
 					ws.onmessage = (ev) => {
 						telemetry = JSON.parse(ev.data);
+						console.log(telemetry);
 					}
 				}
 			}

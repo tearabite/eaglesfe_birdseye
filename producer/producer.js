@@ -42,7 +42,7 @@ class Robot {
             const position = this.getPosition();
             return {
                 x: (position.x / scale) - ((fieldSize.width / 2) / scale),
-                y: (position.y / scale) - ((fieldSize.height / 2) / scale)
+                y: -1 * ((position.y / scale) - ((fieldSize.height / 2) / scale))
             };
         };
     }
