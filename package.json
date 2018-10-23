@@ -1,0 +1,28 @@
+{
+  "scripts": {
+    "birdseye": "node server.js"
+  },
+  "name": "eaglesfe_birdseye",
+  "description": "eaglesfe_birdseye",
+  "version": "1.0.0",
+  "main": "server.js",
+  "dependencies": {
+    "codemirror": "^5.40.2",
+    "express": "^4.16.4",
+    "minimist": "^1.2.0",
+    "opn": "^5.4.0",
+    "ws": "^6.1.0",
+    "yargs": "^12.0.2"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tearabite/birdseye_viewer.git"
+  },
+  "author": "Scott Barnes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tearabite/birdseye_viewer/issues"
+  },
+  "homepage": "https://github.com/tearabite/birdseye_viewer#readme"
+}
