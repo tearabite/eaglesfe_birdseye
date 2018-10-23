@@ -37,17 +37,11 @@ var cmd;
 
     document.body.appendChild(rightRailDiv);
 
-    rightRailDiv.addEventListener('mousedown', (e) => {
+    document.addEventListener('mouseover', (e) => {
         if (controls !== undefined) {
-            controls.enabled = false;
+            controls.enabled = e.path[0].tagName === 'CANVAS';
         }
     });
-
-    document.addEventListener('mouseup', (e) => {
-        if (controls !== undefined) {
-            controls.enabled = true;
-        }
-    })
 
     document.addEventListener('telemetryUpdated', (e) => {
         hud.setValue(JSON.stringify(telemetry, null, 2));
