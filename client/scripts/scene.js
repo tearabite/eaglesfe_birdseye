@@ -38,6 +38,7 @@ window.addEventListener('resize', function () {
   });
 
 // First, setup a plane so it doesn't look like the field is floating in space
+console.log('Loading ground plane...');
 var geometry = new THREE.PlaneGeometry( 500, 500 );
 var texture = new THREE.TextureLoader().load('img/gym_floor.png');
 texture.wrapS = THREE.RepeatWrapping;
@@ -49,6 +50,7 @@ plane.position.set(0,0,-1);
 scene.add( plane );
 
 // Lights
+console.log('Adding lights to scene...');
 var dLight = new THREE.DirectionalLight();
 scene.add( dLight );
 var hLight = new THREE.HemisphereLight();
@@ -67,6 +69,7 @@ spotLight.intensity = 0.5;
 
 scene.add( spotLight );
 
+console.log('Loading robot model...');
 var RobotMesh = function () {
     this.robotGeometry = new THREE.BoxBufferGeometry(18,18,18);
     this.robotMaterial = new THREE.MeshPhongMaterial({ color: 0x4080ff, dithering: true } );

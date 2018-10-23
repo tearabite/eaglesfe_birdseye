@@ -22,7 +22,10 @@ var cmd;
 
     addRow('div', 'log');
     log = CodeMirror(rightRailTable.querySelector('#log'), { lineWrapping: true });
-    log.log = (message) => { log.setValue(log.getValue() + '\n' + message) };
+    log.log = (message) => {
+        log.setValue(log.getValue() + '\n' + message);
+        log.execCommand('goDocEnd');
+    };
 
     addRow('input', 'cmd');
     cmd = rightRailTable.querySelector('#cmd');
