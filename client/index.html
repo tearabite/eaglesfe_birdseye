@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<link rel="stylesheet" href="styles.css">
+		<link rel="stylesheet" href="./styles/styles.css">
         <link rel="stylesheet" href="../node_modules/codemirror/lib/codemirror.css">
     	<style>
 			body { margin: 0; }
@@ -10,37 +10,7 @@
 		</style>
 	</head>
 	<body>
-		<div id="hud"></div>
-		<script>
-			var ws;
-			var args;
-			const Http = new XMLHttpRequest();
-			new XMLHttpRequest()
-			Http.open("GET", 'configuration');
-			Http.send();
-			Http.onreadystatechange = (e) => {
-				if (Http.responseText) {
-					args = JSON.parse(Http.responseText);
-					if (args === undefined) {
-							document.body.innerHTML = "ERROR: Is the application running?"
-					}
-					connect();
-				}
-			}
-			function connect() {
-				if (ws === undefined || ws.readyState !== 1) {
-					const address = `ws://${args.address}:${args.port}`;
-					console.log(`Attemptng to connect to client at ${address}...`);
-					ws = new WebSocket(address);
-					ws.onopen = () => console.log('Connected!');
-					ws.onmessage = (ev) => {
-						telemetry = JSON.parse(ev.data);
-						console.log(telemetry);
-						hud.setValue(JSON.stringify(telemetry, null, 4));
-					}
-				}
-			}
-		</script>
+		<!-- Three.js Imports-->
 		<script src="./scripts/three.js"></script>
     	<script src="./scripts/OrbitControls.js"></script>
 		<script src="./scripts/STLLoader.js"></script>
@@ -50,6 +20,9 @@
 		<script src="../node_modules/codemirror/lib/codemirror.js"></script>
 		<script src="../node_modules/codemirror/mode/javascript/javascript.js"></script>
 
-		<script src="./client.js"></script>
+		<!-- Birdseye Scripts-->
+		<script src="./scripts/connect.js"></script>
+		<script src="./scripts/telemetry.js"></script>
+		<script src="./scripts/scene.js"></script>
 	</body>
 </html>

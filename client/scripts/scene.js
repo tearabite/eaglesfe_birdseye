@@ -1,5 +1,4 @@
 var telemetry;
-var hud = CodeMirror(document.getElementById("hud"));
 
 // Basic Scene Setup
 var scene = new THREE.Scene();
@@ -9,6 +8,7 @@ camera.up = new THREE.Vector3(0,0,1);
 var renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setSize(window.innerWidth, window.innerHeight);
 camera.aspect = window.innerWidth / window.innerHeight;
+camera.setViewOffset(window.innerWidth * .75, window.innerHeight, 0, 0, window.innerWidth, window.innerHeight);
 camera.position.set( 0, -185, 135 );
 
 renderer.shadowMap.enabled = true;
@@ -25,6 +25,7 @@ document.body.appendChild(renderer.domElement);
 window.addEventListener('resize', function () {
     renderer.setSize(window.innerWidth, window.innerHeight);
     camera.aspect = window.innerWidth / window.innerHeight;
+    camera.setViewOffset(window.innerWidth * .75, window.innerHeight, 0, 0, window.innerWidth, window.innerHeight);
     camera.updateProjectionMatrix();
   });
 
