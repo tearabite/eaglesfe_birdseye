@@ -14,7 +14,6 @@ canvas {
 table>*>div {
     border-color: burlywood;
     border-width: 1px;
-    border-style: solid;
 }
 #hud, #log {
     padding: 5px;
@@ -30,25 +29,27 @@ table>*>div {
 
 #cmd {
     width: -webkit-fill-available;
-    border-bottom-left-radius: 15px;
-    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
     border-style: solid;
     border-width: 1px;
     padding: 10px;
     font-size: 12pt;
-    border-color: burlywood;
+    border-color: lightgray;
 }
 
 #rightRail {
-    background: white;
+    background: #fffffff7;
     border-radius: 15px;
     margin: 20px;
     position: absolute;
     width: 25%;
-    height: calc(100% - 50px);
+    height: calc(100% - 35px);
     left: calc(75% - 40px);
     box-shadow: 0px 0px 20px 0px black;
     padding: 5px;
+    margin-top: 15px;
+    margin-bottom: 15px;
 }
 
 #rightRailTable {
@@ -67,5 +68,6 @@ table {
 
 input#cmd:focus {
     outline: none;
-    border-color: red;
+    border: none;
+    box-shadow: 0 0 5px blue;
 }
