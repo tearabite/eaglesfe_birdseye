@@ -1,5 +1,13 @@
 var telemetry;
 
+if (log && log.log) {
+    var clog = console.log;
+    console.error = console.warn = console.info = console.debug = console.log = (message) => {
+        clog(message);
+        log.log(message);
+    }
+}
+
 // Basic Scene Setup
 var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -31,7 +39,10 @@ window.addEventListener('resize', function () {
 
 // First, setup a plane so it doesn't look like the field is floating in space
 var geometry = new THREE.PlaneGeometry( 500, 500 );
-var texture = new THREE.TextureLoader().load( 'img/gym_floor.png' );
+var texture = new THREE.TextureLoader().load('img/gym_floor.png');
+texture.wrapS = THREE.RepeatWrapping;
+texture.wrapT = THREE.RepeatWrapping;
+texture.repeat = new THREE.Vector2(5, 5);
 var material = new THREE.MeshBasicMaterial( { map: texture } );
 var plane = new THREE.Mesh( geometry, material );
 plane.position.set(0,0,-1);

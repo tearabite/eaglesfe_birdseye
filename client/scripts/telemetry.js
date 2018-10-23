@@ -22,6 +22,7 @@ var cmd;
 
     addRow('div', 'log');
     log = CodeMirror(rightRailTable.querySelector('#log'), { lineWrapping: true });
+    log.log = (message) => { log.setValue(log.getValue() + '\n' + message) };
 
     addRow('input', 'cmd');
     cmd = rightRailTable.querySelector('#cmd');
@@ -32,7 +33,6 @@ var cmd;
     commandInput.id = 'cmd';
 
     document.body.appendChild(rightRailDiv);
-
 
     rightRailDiv.addEventListener('mousedown', (e) => {
         if (controls !== undefined) {
@@ -49,8 +49,9 @@ var cmd;
     document.addEventListener('telemetryUpdated', (e) => {
         hud.setValue(JSON.stringify(telemetry, null, 2));
     });
+
     document.addEventListener('connected', (e) => {
-        log.setValue(log.getValue() + '\n' + `Connection esablished to ${args.address} on port ${args.port}!`);
+        log.log(`Connection esablished to ${args.address} on port ${args.port}!`);
     });
 })();
 
