@@ -30,10 +30,12 @@ var cmd;
     addRow('input', 'cmd');
     cmd = rightRailTable.querySelector('#cmd');
     cmd.type = 'text';
+    cmd.id = 'cmd';
 
-    let commandInput = document.createElement('input');
-    commandInput.type = 'text';
-    commandInput.id = 'cmd';
+    cmd.addEventListener('change', (e) => {
+        ws.send(JSON.stringify(cmd.value));
+        cmd.value = '';
+    });
 
     document.body.appendChild(rightRailDiv);
 

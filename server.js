@@ -50,19 +50,28 @@ if (args.debug) {
     });
 
     socket = new WebSocketServer({ port: args.port });
-    var client;
+    socket.broadcast = function broadcast(data, originator) {
+        socket.clients.forEach(function each(client) {
+            if (client !== socket.producer && client !== originator && client.readyState === 1) {
+                client.send(data);
+            }
+        });
+    };
+
     socket.on('connection', function (ws, req) {
-        if (req.url === '/?name=producer'){
-            console.log('DEBUG PRODUCER CONNECTED');
-            ws.onmessage = function (message) {
-                if (client) {
-                    client.send(message.data);
+        ws.onmessage = function (message) {
+            if (typeof message.data === 'string' && message.data.startsWith('$!')) {
+                const controlMessage = message.data.substring(2).toLowerCase();
+                if (controlMessage === 'producer') {
+                    console.log('DEBUG PRODUCER CONNECTED');
+                    socket.producer = ws;
                 }
-            };
-        } else {
-            console.log('CLIENT CONNECTED');
-            client = ws;
-        }
+            } else {
+                socket.broadcast(message.data, ws);
+                console.log(message.data);
+            }
+        };
+        console.log('CLIENT CONNECTED');
     });
 }
 
