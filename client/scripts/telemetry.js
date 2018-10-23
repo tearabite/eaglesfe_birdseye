@@ -18,10 +18,10 @@ var cmd;
     rightRailDiv.appendChild(rightRailTable);
 
     addRow('div', 'hud');
-    hud = CodeMirror(rightRailTable.querySelector('#hud'));
+    hud = CodeMirror(rightRailTable.querySelector('#hud'), {lineWrapping: true });
 
     addRow('div', 'log');
-    log = CodeMirror(rightRailTable.querySelector('#log'));
+    log = CodeMirror(rightRailTable.querySelector('#log'), { lineWrapping: true });
 
     addRow('input', 'cmd');
     cmd = rightRailTable.querySelector('#cmd');
@@ -48,6 +48,9 @@ var cmd;
 
     document.addEventListener('telemetryUpdated', (e) => {
         hud.setValue(JSON.stringify(telemetry, null, 2));
+    });
+    document.addEventListener('connected', (e) => {
+        log.setValue(log.getValue() + '\n' + `Connection esablished to ${args.address} on port ${args.port}!`);
     });
 })();
 
