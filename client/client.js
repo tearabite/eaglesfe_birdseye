@@ -1,4 +1,5 @@
 var telemetry;
+var hud = CodeMirror(document.getElementById("hud"));
 
 // Basic Scene Setup
 var scene = new THREE.Scene();

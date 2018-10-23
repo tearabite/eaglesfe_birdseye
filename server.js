@@ -23,6 +23,10 @@ app.get('/', (req, res, next) => {
     res.redirect('/client/')
 });
 
+app.get('/node_modules/*', (req, res, next) => {
+    res.sendfile(path.join(__dirname, req.url));
+});
+
 app.get('/client/*', (req, res, next) => {
     res.sendfile(path.join(__dirname, req.url));
 });

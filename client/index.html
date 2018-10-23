@@ -2,12 +2,15 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-    <style>
+		<link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="../node_modules/codemirror/lib/codemirror.css">
+    	<style>
 			body { margin: 0; }
 			canvas { width: 100%; height: 100% }
 		</style>
 	</head>
 	<body>
+		<div id="hud"></div>
 		<script>
 			var ws;
 			var args;
@@ -33,6 +36,7 @@
 					ws.onmessage = (ev) => {
 						telemetry = JSON.parse(ev.data);
 						console.log(telemetry);
+						hud.setValue(JSON.stringify(telemetry, null, 4));
 					}
 				}
 			}
@@ -41,6 +45,11 @@
     	<script src="./scripts/OrbitControls.js"></script>
 		<script src="./scripts/STLLoader.js"></script>
 		<script src="./models/parts_list.js"></script>
+
+		<!-- CodeMirror Imports -->
+		<script src="../node_modules/codemirror/lib/codemirror.js"></script>
+		<script src="../node_modules/codemirror/mode/javascript/javascript.js"></script>
+
 		<script src="./client.js"></script>
 	</body>
 </html>
