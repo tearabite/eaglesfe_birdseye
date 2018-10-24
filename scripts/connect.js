@@ -20,7 +20,7 @@ var args;
             const address = `ws://${args.address}:${args.port}`;
             console.log(`Attemptng to connect to client at ${address}...`);
             ws = new WebSocket(address);
-            ws.onopen = (ev) => {
+            ws.onopen = () => {
                 console.log('Connected!');
                 var event = new CustomEvent('connected');
                 document.dispatchEvent(event);
