@@ -1,13 +1,5 @@
 var telemetry;
 
-if (log && log.log) {
-    var clog = console.log;
-    console.error = console.warn = console.info = console.debug = console.log = (message) => {
-        clog(message);
-        log.log(message);
-    }
-}
-
 // Basic Scene Setup
 var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);

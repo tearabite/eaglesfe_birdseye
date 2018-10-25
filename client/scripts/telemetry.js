@@ -3,41 +3,40 @@ var log;
 var cmd;
 
 (function buildRightRail() {
-    let addRow = function (kind, id) {
-        let tr = document.createElement('tr');
-        let elmnt = document.createElement(kind);
-        elmnt.id = id;
-        tr.appendChild(elmnt);
-        rightRailTable.appendChild(tr);
-    };
+    let rightRail = document.createElement('div');
+    rightRail.id = 'rightRail';
+    document.body.appendChild(rightRail);
 
-    let rightRailDiv = document.createElement('div');
-    let rightRailTable = document.createElement('table');
-    rightRailDiv.id = 'rightRail';
-    rightRailTable.id = 'rightRailTable';
-    rightRailDiv.appendChild(rightRailTable);
+    let inner = document.createElement('div');
+    inner.id = 'inner';
+    rightRail.appendChild(inner);
 
-    addRow('div', 'hud');
-    hud = CodeMirror(rightRailTable.querySelector('#hud'), {lineWrapping: true });
+    let hud = document.createElement('div');
+    hud.id = 'hud';
+    inner.appendChild(hud);
+    hud = CodeMirror(inner.querySelector('#hud'), {lineWrapping: true });
 
-    addRow('div', 'log');
-    log = CodeMirror(rightRailTable.querySelector('#log'), { lineWrapping: true });
-    log.log = (message) => {
+    let log = document.createElement('div');
+    log.id = 'log';
+    inner.appendChild(log);
+    log = CodeMirror(inner.querySelector('#log'), { lineWrapping: true });
+
+    var clog = console.log;
+    console.error = console.warn = console.info = console.debug = console.log = (message) => {
+        clog(message);
         log.setValue(log.getValue() + '\n' + message);
         log.execCommand('goDocEnd');
-    };
+    }
 
-    addRow('input', 'cmd');
-    cmd = rightRailTable.querySelector('#cmd');
-    cmd.type = 'text';
+    let cmd = document.createElement('input');
     cmd.id = 'cmd';
-
+    cmd.type = 'text';
+    rightRail.appendChild(cmd);
+    cmd = rightRail.querySelector('#cmd');
     cmd.addEventListener('change', (e) => {
         ws.send(JSON.stringify(cmd.value));
         cmd.value = '';
     });
-
-    document.body.appendChild(rightRailDiv);
 
     document.addEventListener('mouseover', (e) => {
         if (controls !== undefined) {
