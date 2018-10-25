@@ -1,64 +1,70 @@
-body { margin: 0; }
-canvas { width: 100%; height: 100% }
+body {
+    margin: 0;
+}
+
+canvas {
+    width: 100%;
+    height: 100%
+}
 
 #rightRail>:first-child {
-    border-top-left-radius:         10px;
-    border-top-right-radius:        10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }
 
 #rightRail>:last-child {
-    border-bottom-left-radius:      10px;
-    border-bottom-right-radius:     10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
 #cmd {
-    width:          -webkit-fill-available;
-    border-style:   solid;
-    border-width:   1px;
-    padding:        10px;
-    font-size:      12pt;
-    border-color:   lightgray;
+    width: -webkit-fill-available;
+    border-style: solid;
+    border-width: 1px;
+    padding: 10px;
+    font-size: 12pt;
+    border-color: lightgray;
+}
+
+body>div {
+    box-shadow: 0px 0px 20px 0px black;
+    background: #fffffff7;
+    border-radius: 15px;
+    margin: 15px;
+    bottom: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 25%;
 }
 
 #inner>div {
-    height:         50%;
-}
-
-#rightRail {
-    background:     #fffffff7;
-    border-radius:  15px;
-    margin:         15px;
-    width:          25%;
-    position:       absolute;
-    right:          0;
-    top:            0;
-    bottom:         0;
-    box-shadow:     0px 0px 20px 0px black;
+    height: 50%;
 }
 
 #inner {
-    bottom:         55px;
-    position:       absolute;
-    top:            0;
-    width:          calc(100% - 30px);
-    margin:         15px;
+    bottom: 55px;
+    position: absolute;
+    top: 0;
+    width: calc(100% - 30px);
+    margin: 15px;
 }
 
 input[type="text"] {
     margin: 10px;
-    outline:        none;
-    border:         none;
-    position:       absolute;
-    bottom:         0px;
-    left:           0px;
-    right:          0px;
+    outline: none;
+    border: none;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
 }
 
 input[type="text"]:focus {
-    box-shadow:     0 0 5px blue;
+    box-shadow: 0 0 5px blue;
 }
 
 .CodeMirror {
-    height:         100% !important;
-    background:     transparent !important;
+    height: 100% !important;
+    background: transparent !important;
 }
