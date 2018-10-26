@@ -1,7 +1,7 @@
 fieldParts = [
     {
         model: 'models/parts/field_tiles.stl',
-        material: new THREE.MeshPhongMaterial({ color: 0xAAAAAA, dithering: true}),
+        material: new THREE.MeshPhongMaterial({ color: 0xffffff, dithering: true}),
         rotation:  { x: 90 }
     },
     {
@@ -52,16 +52,24 @@ fieldParts = [
         translation: new THREE.Vector3(-59, 60, 0.4)
     },
     {
-        model: 'models/parts/rr_lander_reduced.stl',
+        // model: 'models/parts/rr_lander_reduced.stl',
+        model: 'models/parts/lander.glb',
         material: new THREE.MeshPhysicalMaterial({ color: 0x4C4C4C }),
-        rotation:  { x: 90, y: 45 },
+        rotation:  { z: 45 },
         translation: new THREE.Vector3(0, 0, 0),
         outline: new THREE.LineBasicMaterial( { color: 0x777777 } )
     },
 ];
 
-var loader = new THREE.STLLoader();
+var stlLoader = new THREE.STLLoader();
+var glbLoader = new THREE.GLTFLoader();
+var loader;
 function addPartToScene(settings, scene, storage) {
+    if (settings.model.endsWith('.stl')) {
+        loader = stlLoader;
+    } else {
+        loader = glbLoader;
+    }
     loader.load(settings.model, function (geometry) {
         console.log(`Loading ${settings.model}`);
         let mesh = new THREE.Mesh(geometry, settings.material);

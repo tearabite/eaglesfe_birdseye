@@ -1,5 +1,7 @@
 var telemetry;
 
+
+
 // Basic Scene Setup
 var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -29,38 +31,6 @@ window.addEventListener('resize', function () {
     camera.updateProjectionMatrix();
   });
 
-// First, setup a plane so it doesn't look like the field is floating in space
-console.log('Loading ground plane...');
-var geometry = new THREE.PlaneGeometry( 500, 500 );
-var texture = new THREE.TextureLoader().load('img/gym_floor.png');
-texture.wrapS = THREE.RepeatWrapping;
-texture.wrapT = THREE.RepeatWrapping;
-texture.repeat = new THREE.Vector2(5, 5);
-var material = new THREE.MeshBasicMaterial( { map: texture } );
-var plane = new THREE.Mesh( geometry, material );
-plane.position.set(0,0,-1);
-scene.add( plane );
-
-// Lights
-console.log('Adding lights to scene...');
-var dLight = new THREE.DirectionalLight();
-scene.add( dLight );
-var hLight = new THREE.HemisphereLight();
-scene.add( hLight );
-
-spotLight = new THREE.SpotLight( 0xddeeee, 1 );
-spotLight.position.set(0, 0, 150 );
-spotLight.angle = 1;
-spotLight.penumbra = 0.05;
-spotLight.decay = 2;
-spotLight.distance = 300;
-spotLight.castShadow = true;
-spotLight.shadow.camera.near = 10;
-spotLight.shadow.camera.far = 200;
-spotLight.intensity = 0.5;
-
-scene.add( spotLight );
-
 console.log('Loading robot model...');
 var RobotMesh = function () {
     this.robotGeometry = new THREE.BoxBufferGeometry(18,18,18);
@@ -72,8 +42,13 @@ var RobotMesh = function () {
     return robot;
 };
 
-var field = [];
-fieldParts.forEach(part => addPartToScene(part, scene, field));
+var loader = new THREE.ObjectLoader();
+loader.load('models/parts/scene.json', function (object) {
+    scene.add(object);
+});
+
+// var field = [];
+// fieldParts.forEach(part => addPartToScene(part, scene, field));
 
 function animate() {
     requestAnimationFrame( animate );
