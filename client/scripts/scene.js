@@ -36,6 +36,8 @@ var spotlight = new THREE.SpotLight("#444444");
 
 spotlight.position.set(0, 0, 80);
 spotlight.castShadow = true;
+spotlight.penumbra = 0.06;
+spotlight.intensity = 1.5;
 light.position.set( 0, -70, 100 ).normalize();
 scene.add(light);
 scene.add(ambient);
