@@ -3,23 +3,65 @@ const express = require('express');
 const app = express();
 const WebSocketServer = require('ws').Server;
 const opn = require('opn');
+const jsonfile = require('jsonfile')
+const glob = require('glob');
+const path = require('path');
 
+// Get commandline arguments or their defaults
 args.address = args.address || 'localhost';
 args.port = args.port || 3708;
 args.debug = args.debug !== undefined;
 args.http = args.http || 8080;
 args.open = args.open !== undefined;
 
-console.log(`Starting Birdseye in ${args.debug ? 'debug' : 'client'} mode...`);
-
 if (!args.debug && args.address === undefined) {
     throw new Error("Must specify an address to use as the server. This should be the IP address of the robot controller running BirdseyeServer.")
 }
+
+var assets = {};
+{
+    // Attempt to load or verify basic field model asset information.
+    let obj = jsonfile.readFileSync('client/models/assets.json');
+    {
+        if (obj === undefined) {
+            console.error("No generic field assets defined. Check your assets.json file.");
+        } else {
+            assets.generic = obj;
+        }
+    };
+
+    // Attempt to locate and load game specific asset information.
+    let files = glob.sync('client/models/games/**/config.json');
+    assets.games = assets.games || [];
+    files.forEach(config => {
+        json = jsonfile.readFileSync(config);
+        const isValid =
+            json !== undefined
+            && json.name !== undefined
+            && json.season != undefined
+            && json.assets != undefined
+            && json.assets.length > 0;
+        if (isValid === true) {
+            console.log(`Found game \'${json.name}\'...`);
+            json.assets.forEach(asset => {
+                asset.path = path.relative('client', path.join(path.dirname(config), asset.path))
+            });
+            assets.games.push(json);
+        }
+    });
+}
+
+console.log(`Starting Birdseye in ${args.debug ? 'debug' : 'client'} mode...`);
 
 // Start an HTTP server so we can access the relevant HTML frontend pages.
 app.get('*configuration', (req, res, next) => {
     const { _, $0, ...otherKeys } = args;
     res.json(otherKeys);
+    res.end();
+});
+
+app.get('*assets', (req, res, next) => {
+    res.json(assets);
     res.end();
 });
 
@@ -61,3 +103,4 @@ if (args.debug) {
         console.log('CLIENT CONNECTED');
     });
 }
+

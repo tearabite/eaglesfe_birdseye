@@ -3,7 +3,6 @@ var args;
 
 (function setupWs() {
     const Http = new XMLHttpRequest();
-    new XMLHttpRequest()
     Http.open("GET", 'configuration');
     Http.send();
     Http.onreadystatechange = (e) => {
@@ -21,7 +20,6 @@ var args;
             console.log(`Attemptng to connect to client at ${address}...`);
             ws = new WebSocket(address);
             ws.onopen = () => {
-                console.log('Connected!');
                 var event = new CustomEvent('connected');
                 document.dispatchEvent(event);
             };
