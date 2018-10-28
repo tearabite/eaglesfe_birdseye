@@ -32,23 +32,27 @@ var assets = {};
 
     // Attempt to locate and load game specific asset information.
     let files = glob.sync('client/models/games/**/config.json');
-    assets.games = assets.games || [];
-    files.forEach(config => {
-        json = jsonfile.readFileSync(config);
-        const isValid =
-            json !== undefined
-            && json.name !== undefined
-            && json.season != undefined
-            && json.assets != undefined
-            && json.assets.length > 0;
-        if (isValid === true) {
-            console.log(`Found game \'${json.name}\'...`);
-            json.assets.forEach(asset => {
-                asset.path = path.relative('client', path.join(path.dirname(config), asset.path))
-            });
-            assets.games.push(json);
-        }
-    });
+    if (files.length === 0) {
+        console.warn("No games found in the games directory.")
+    } else {
+        assets.games = assets.games || [];
+        files.forEach(config => {
+            json = jsonfile.readFileSync(config);
+            const isValid =
+                json !== undefined
+                && json.name !== undefined
+                && json.season != undefined
+                && json.assets != undefined
+                && json.assets.length > 0;
+            if (isValid === true) {
+                console.log(`Found game \'${json.name}\'...`);
+                json.assets.forEach(asset => {
+                    asset.path = path.relative('client', path.join(path.dirname(config), asset.path))
+                });
+                assets.games.push(json);
+            }
+        });
+    }
 }
 
 console.log(`Starting Birdseye in ${args.debug ? 'debug' : 'client'} mode...`);
