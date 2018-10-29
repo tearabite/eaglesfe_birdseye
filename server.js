@@ -56,7 +56,7 @@ var assets = {};
         });
     }
 }
-console.log(__dirname);
+
 console.log(`Starting Birdseye in ${args.debug ? 'debug' : 'client'} mode...`);
 
 // Start an HTTP server so we can access the relevant HTML frontend pages.
