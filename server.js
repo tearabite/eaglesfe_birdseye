@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const args = require('yargs').argv
 const express = require('express');
 const app = express();
@@ -21,7 +23,7 @@ if (!args.debug && args.address === undefined) {
 var assets = {};
 {
     // Attempt to load or verify basic field model asset information.
-    let obj = jsonfile.readFileSync('client/models/assets.json');
+    let obj = jsonfile.readFileSync(__dirname + '/client/models/assets.json');
     {
         if (obj === undefined) {
             console.error("No generic field assets defined. Check your assets.json file.");
@@ -54,7 +56,7 @@ var assets = {};
         });
     }
 }
-
+console.log(__dirname);
 console.log(`Starting Birdseye in ${args.debug ? 'debug' : 'client'} mode...`);
 
 // Start an HTTP server so we can access the relevant HTML frontend pages.
@@ -69,9 +71,9 @@ app.get('*assets', (req, res, next) => {
     res.end();
 });
 
-app.use('/scripts', express.static('scripts'))
-app.use('/client', express.static('client'))
-app.use('/node_modules', express.static('node_modules'))
+app.use('/scripts', express.static(path.join(__dirname, 'scripts')));
+app.use('/client', express.static(path.join(__dirname, 'client')));
+app.use('/node_modules', express.static(path.join(__dirname, 'node_modules')));
 app.listen(args.http, function () {
     const clientUrl = `http:localhost:${args.http}/client/`;
     const producerUrl = `http:localhost:${args.http}/debug/`;
@@ -88,7 +90,7 @@ app.listen(args.http, function () {
 
 // If we're in debug mode, start a websocket server for the two apps to use.
 if (args.debug) {
-    app.use('/debug', express.static('producer'))
+    app.use('/debug', express.static(path.join(__dirname, 'producer')));
 
     socket = new WebSocketServer({ port: args.port });
     socket.broadcast = function broadcast(data, originator) {
