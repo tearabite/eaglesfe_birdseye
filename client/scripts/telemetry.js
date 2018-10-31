@@ -1,11 +1,13 @@
 var hud, log, cmd;
 
-hud = CodeMirror(inner.querySelector('#hud'), {
-    lineWrapping: true
-});
-log = CodeMirror(inner.querySelector('#log'), {
-    lineWrapping: true
-});
+var codemirrorOptions = {
+    lineWrapping: true,
+    readOnly: true,
+    cursorBlinkRate: -1
+};
+
+hud = CodeMirror(document.querySelector('#hud'), codemirrorOptions);
+log = CodeMirror(document.querySelector('#log'), codemirrorOptions);
 
 var clog = console.log;
 console.error = console.warn = console.info = console.debug = console.log = (message) => {
@@ -20,8 +22,13 @@ cmd.addEventListener('change', (e) => {
     cmd.value = '';
 });
 
-popIn = () => {
-    rightRail.animate([{
+pop = (element, popIn) => {
+    element.animate([
+        {
+            opacity: 0,
+            transform: 'scale(0)',
+        },
+        {
             opacity: 0,
             transform: 'scale(0.7)',
         },
@@ -35,25 +42,7 @@ popIn = () => {
             opacity: 1,
             easing: 'ease-in'
         }
-    ], 350);
-};
-
-popOut = () => {
-    rightRail.animate([{
-            opacity: 1,
-            transform: 'scale(1.0)',
-        },
-        {
-            transform: 'scale(1.2)',
-            opacity: 1,
-            easing: 'ease-out'
-        },
-        {
-            transform: 'scale(0.7)',
-            opacity: 0,
-            easing: 'ease-in'
-        }
-    ], 350);
+    ], {duration: 350, fill: 'both', direction: popIn ? 'normal' : 'reverse'});
 };
 
 document.addEventListener('mouseover', (e) => {
@@ -70,4 +59,13 @@ document.addEventListener('connected', (e) => {
     console.log(`Connection esablished to ${args.address} on port ${args.port}!`);
 });
 
-popIn();
+pop(rightRail, true);
+
+settingsMenu = () => {
+    var settingsMenu = document.getElementById('settingsMenu');
+    if (getComputedStyle(settingsMenu).opacity === "1") {
+        pop(settingsMenu, false);
+    } else {
+        pop(settingsMenu, true);
+    }
+}

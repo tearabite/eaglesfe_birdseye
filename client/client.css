@@ -7,6 +7,15 @@ canvas {
     height: 100%
 }
 
+body>div {
+    box-shadow: 0px 0px 20px 0px black;
+    background: #fffffff7;
+    border-radius: 15px;
+    margin: 15px;
+    bottom: 0;
+    position: absolute;
+}
+
 #rightRail>:first-child {
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
@@ -17,32 +26,71 @@ canvas {
     border-bottom-right-radius: 10px;
 }
 
-#cmd {
-    width: -webkit-fill-available;
-    border-style: solid;
-    border-width: 1px;
-    padding: 10px;
-    font-size: 12pt;
-    border-color: lightgray;
+#settingsMenu {
+    left: calc((100% - 25% - 400px) / 2);
+    width: 400px;
+    height: 300px;
+    top: calc((100% - 300px) / 2);
+    max-width: 35%;
 }
 
-body>div {
-    box-shadow: 0px 0px 20px 0px black;
-    background: #fffffff7;
-    border-radius: 15px;
-    margin: 15px;
+#settingsMenu>input {
     bottom: 0;
     position: absolute;
+    margin: 15px;
+    width: -webkit-fill-available;
+}
+
+.param>td:first-child {
+    width:100%
+}
+
+.param>td:last-child {
+    width:auto
+}
+
+#rightRail {
     top: 0;
     right: 0;
     width: 25%;
 }
 
-#inner>div {
+#toolbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+#toolbar>button {
+    color: gray;
+    right: 0;
+}
+
+#toolbar>* {
+    height: auto;
+    font-size: x-large;
+    color: gray;
+    position: absolute;
+    z-index: 5;
+    padding: 0px;
+}
+
+button {
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+button:focus {
+    outline: none;
+}
+
+#rightRail>div>div {
     height: 50%;
 }
 
-#inner {
+body>div>div, body>div>table {
     bottom: 55px;
     position: absolute;
     top: 0;
@@ -50,21 +98,33 @@ body>div {
     margin: 15px;
 }
 
-input[type="text"] {
-    margin: 10px;
-    outline: none;
-    border: none;
-    position: absolute;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
+#rightRail>input[type="text"]:focus {
+    box-shadow: 0 0 5px blue;
 }
 
-input[type="text"]:focus {
-    box-shadow: 0 0 5px blue;
+#cmd {
+    width: -webkit-fill-available;
+    border-style: solid;
+    border-width: 1px;
+    padding: 10px;
+    margin: 10px;
+    border-color: lightgray;
+    position: absolute;
+    bottom: 0px;
+}
+
+input[type="text"] {
+    font-size: 12pt;
+    width: 120px;
 }
 
 .CodeMirror {
     height: 100% !important;
     background: transparent !important;
+}
+
+.poppable {
+    width: 0px;
+    height:0px;
+    opacity: 0;
 }

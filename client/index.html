@@ -4,6 +4,7 @@
 		<meta charset="utf-8">
 		<link rel="stylesheet" href="./client.css">
 		<link rel="stylesheet" href="../node_modules/codemirror/lib/codemirror.css">
+		<link rel="stylesheet" href="../node_modules/@fortawesome/fontawesome-free/css/all.css">
 
 		<!-- Three.js Imports-->
 		<script src="../node_modules/three/build/three.js"></script>
@@ -15,13 +16,33 @@
 		<script src="../node_modules/codemirror/lib/codemirror.js"></script>
 		<script src="../node_modules/codemirror/mode/javascript/javascript.js"></script>
 	</head>
-	<body>
+	<body style="font-family: sans-serif">
 		<div id="rightRail">
-			<div id="inner">
+			<div>
+				<div id="toolbar">
+					<div>
+						<i class="fas fa-plug"></i>
+					</div>
+					<button>
+						<i class="fas fa-cog" onclick="settingsMenu()"></i>
+					</button>
+				</div>
 				<div id="hud"></div>
 				<div id="log"></div>
 			</div>
 			<input id="cmd" type="text">
+		</div>
+
+		<div id="settingsMenu" class="poppable">
+			<table>
+				<tr class="param">
+					<td>Robot IP Address:</td><td><input type="text" value="192.168.1.100" name="address"/></td>
+				</tr>
+				<tr class="param">
+					<td>Port:</td><td><input type="text" value="3708" name="port"/></td>
+				</tr>
+			</table>
+			<input type="button" value="Save" name="save"/>
 		</div>
 
 		<!-- Birdseye Scripts-->

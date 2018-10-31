@@ -57,6 +57,7 @@ function loadGlb(path, done) {
         });
 
         gltf.scene.rotateX(THREE.Math.degToRad(90));
+        gltf.scene.rotateY(THREE.Math.degToRad(-90));
         gltf.scene.up = new THREE.Vector3(0, 0, 1);
         scene.add(gltf.scene);
         if (done !== undefined) {

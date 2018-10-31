@@ -25,5 +25,8 @@
   "bugs": {
     "url": "https://github.com/tearabite/birdseye_viewer/issues"
   },
-  "homepage": "https://github.com/tearabite/birdseye_viewer#readme"
+  "homepage": "https://github.com/tearabite/birdseye_viewer#readme",
+  "devDependencies": {
+    "@fortawesome/fontawesome-free": "^5.4.2"
+  }
 }
