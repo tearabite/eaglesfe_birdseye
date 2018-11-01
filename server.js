@@ -2,6 +2,7 @@
 
 const args = require('yargs').argv
 const express = require('express');
+const bodyParser = require('body-parser')
 const app = express();
 const WebSocketServer = require('ws').Server;
 const opn = require('opn');
@@ -12,9 +13,10 @@ const path = require('path');
 var json = jsonfile.readFileSync('config.json');
 
 // Get commandline arguments or their defaults
-args.address = json.address || 'localhost';
-args.port = json.port || 3708;
 args.debug = (args.debug || json.debug) !== undefined;
+
+args.address = args.debug ? 'localhost' : (json.address || 'localhost');
+args.port = json.port || 3708;
 args.http = json.http || 8080;
 
 if (!args.debug && args.address === undefined) {
@@ -61,6 +63,14 @@ var assets = {};
 console.log(`Starting Birdseye in ${args.debug ? 'debug' : 'client'} mode...`);
 
 // Start an HTTP server so we can access the relevant HTML frontend pages.
+app.use(bodyParser.json())
+app.post('*configuration', (req, res, next) => {
+    Object.assign(args, req.body);
+    restartServer();
+    jsonfile.writeFile(path.join(__dirname, 'config.json'), req.body);
+    res.end();
+});
+
 app.get('*configuration', (req, res, next) => {
     const { _, $0, ...otherKeys } = args;
     res.json(otherKeys);
@@ -93,20 +103,23 @@ app.listen(args.http, function () {
 if (args.debug) {
     app.use('/debug', express.static(path.join(__dirname, 'producer')));
 
-    socket = new WebSocketServer({ port: args.port });
-    socket.broadcast = function broadcast(data, originator) {
-        socket.clients.forEach(function each(client) {
-            if (client !== originator && client.readyState === 1) {
-                client.send(data);
-            }
-        });
-    };
-
-    socket.on('connection', function (ws, req) {
-        ws.onmessage = function (message) {
-            socket.broadcast(message.data, ws);
-            console.log(message.data);
+    function restartServer() {
+        socket = new WebSocketServer({ port: args.port });
+        socket.broadcast = function broadcast(data, originator) {
+            socket.clients.forEach(function each(client) {
+                if (client !== originator && client.readyState === 1) {
+                    client.send(data);
+                }
+            });
         };
-        console.log('CLIENT CONNECTED');
-    });
+
+        socket.on('connection', function (ws, req) {
+            ws.onmessage = function (message) {
+                socket.broadcast(message.data, ws);
+                console.log(message.data);
+            };
+            console.log('CLIENT CONNECTED');
+        });
+    }
+    restartServer();
 }

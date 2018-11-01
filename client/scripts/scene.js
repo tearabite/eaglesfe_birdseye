@@ -81,10 +81,11 @@ request.onreadystatechange = (e) => {
             console.error("No field assets found. Nothing to render!")
         } else {
             // Load the generic field
+            console.log(`Loading ----`)
             assets.generic.forEach(asset => {
                 const name = asset.name;
                 const path = asset.path;
-                console.log(`Loading \"${name}\" from \"${path}\"...`)
+                console.log(`\t+ ${name}`)
                 loadGlb(path);
             });
 
@@ -92,8 +93,9 @@ request.onreadystatechange = (e) => {
             if (assets.games !== undefined && assets.games.length > 0) {
                 const game = assets.games[0];
                 if (game.assets !== undefined) {
-                    console.log(`Loading game \'${game.name}...`)
+                    console.log(`Loading game \"${game.name}\"`)
                     game.assets.forEach(asset => {
+                        console.log(`\t+ ${asset.name}`)
                         loadGlb(asset.path);
                     });
                 } else {

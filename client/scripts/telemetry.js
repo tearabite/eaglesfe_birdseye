@@ -32,18 +32,11 @@ pop = (element, direction) => {
     ;
 };
 
+var controls;
 document.addEventListener('mouseover', (e) => {
     if (controls !== undefined) {
         controls.enabled = e.path[0].tagName === 'CANVAS';
     }
-});
-
-document.addEventListener('telemetryUpdated', (e) => {
-    hud.setValue(JSON.stringify(telemetry, null, 2));
-});
-
-document.addEventListener('connected', (e) => {
-    console.log(`Connection esablished to ${args.address} on port ${args.port}!`);
 });
 
 (function settings () {
@@ -77,6 +70,7 @@ document.addEventListener('connected', (e) => {
                 debug: document.querySelector('input[name="debug"]').checked,
                 http: document.querySelector('input[name="http"]').value
             }
+            setConfiguration(newSettings);
         }
         pop(settingsMenu, 'out');
     };
@@ -98,9 +92,38 @@ document.addEventListener('connected', (e) => {
     };
 
     const pane = document.getElementById('rightRail');
-    const hud = CodeMirror(pane.querySelector('.hud'), codemirrorOptions);
+    const hud = CodeMirror(pane.querySelector('.raw'), codemirrorOptions);
     const log = CodeMirror(pane.querySelector('.log'), codemirrorOptions);
     const cmd = pane.querySelector('#cmd');
+    const connectButton = document.querySelector('#rightRail #toolbar #connect');
+    let ws;
+    connectButton.addEventListener('click', () => {
+        if (ws && ws.readyState === ws.OPEN) {
+            ws.close();
+        }
+        else {
+            getConfiguration((args) => {
+                console.log(`CONNECTING... - ${args.address}:${args.port}.`);
+
+                connectButton.classList.remove('disconnected');
+                connectButton.classList.add('connecting');
+                ws = connect(args.address, args.port, () => {
+                    connectButton.classList.remove('connecting');
+                    connectButton.classList.add('connected');
+                    console.log(`CONNECTED! - ${args.address}:${args.port}.`);
+                }, (message) => {
+                    hud.setValue(JSON.stringify(message, null, 2));
+                    telemetry = message;
+                }, () => {
+                    connectButton.classList.remove('connected');
+                    connectButton.classList.remove('connecting');
+                    connectButton.classList.add('disconnected');
+                    ws = undefined;
+                    console.log(`DISCONNECTED! - ${args.address}:${args.port}.`);
+                });
+            });
+        }
+    });
 
     var clog = console.log;
     console.error = console.warn = console.info = console.debug = console.log = (message) => {

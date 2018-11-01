@@ -28,10 +28,11 @@ body>div {
 
 #rightRail .raw {
     height: 40%;
+    margin-top: 20px;
 }
 
 #rightRail .log {
-    height: 57%;
+    height: 55%;
 }
 #rightRail {
     top: 0;
@@ -43,6 +44,10 @@ body>div {
     height: auto;
     justify-content: space-between;
     display: flex;
+    background: #8080804a;
+    border-radius: 10px;
+    padding: 10px;
+    margin: -5px;
 }
 
 #rightRail #toolbar button {
@@ -99,6 +104,19 @@ body>div>div, body>div>table {
     visibility: hidden;
     opacity: 0;
     transform: scale(0.1);
+}
+
+@keyframes pulse {
+	0% {opacity: 1;}
+	100% {opacity: 0.25;}
+}
+
+.disconnected {
+}
+
+.connecting {
+    color: rgb(194, 191, 14) !important;
+    animation: pulse 1s infinite alternate
 }
 
 .connected {

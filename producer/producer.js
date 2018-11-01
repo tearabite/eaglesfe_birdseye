@@ -50,6 +50,10 @@ class Robot {
 
 var field = document.querySelector('#fieldDiv');
 var robot = new Robot(document.querySelector('#robotDiv'));
+var ws;
+getConfiguration((args) => {
+    ws = connect(args.address, args.port);
+});
 
 dragElement(robot);
 

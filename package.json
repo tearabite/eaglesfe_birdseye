@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "main": "server.js",
   "dependencies": {
+    "body-parser": "^1.18.3",
     "codemirror": "^5.40.2",
     "express": "^4.16.4",
     "glob": "^7.1.3",
