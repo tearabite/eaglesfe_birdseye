@@ -12,6 +12,18 @@ function getConfiguration(done) {
     }
 }
 
+function setConfiguration(done) {
+    const Http = new XMLHttpRequest();
+    Http.open("GET", 'configuration');
+    Http.send();
+    Http.onreadystatechange = (e) => {
+        if (Http.readyState === 4 && Http.responseText) {
+            const args = JSON.parse(Http.responseText);
+            done(args);
+        }
+    }
+}
+
 function connect(address, port) {
     if (ws === undefined || ws.readyState !== 1) {
         const url = `ws://${address}:${port}`;

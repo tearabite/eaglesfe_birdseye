@@ -49,6 +49,9 @@ document.addEventListener('connected', (e) => {
 (function settings () {
     const settingsButton = document.getElementById('settingsButton');
     const settingsMenu = document.getElementById('settingsMenu');
+    const saveButton = document.querySelector('#settingsMenu .buttons .button[name="save"]');
+    const cancelButton = document.querySelector('#settingsMenu .buttons .button[name="cancel"]');
+
     settingsButton.addEventListener('click', () => {
         if (getComputedStyle(settingsMenu).visibility === 'visible') {
             pop(settingsMenu, 'out');
@@ -56,24 +59,35 @@ document.addEventListener('connected', (e) => {
             reveal();
         }
     });
+
     var reveal = () => {
-        var settingsMenu = document.getElementById('settingsMenu');
         getConfiguration((args) => {
             document.querySelector('input[name="address"]').value = args.address;
             document.querySelector('input[name="port"]').value = args.port;
             document.querySelector('input[name="debug"]').checked = args.debug;
+            document.querySelector('input[name="http"]').value = args.http;
             pop(settingsMenu, 'in');
         });
     };
     var dismiss = (save) => {
-        var settingsMenu = document.getElementById('settingsMenu');
-        getConfiguration((args) => {
-            document.querySelector('input[name="address"]').value = args.address;
-            document.querySelector('input[name="port"]').value = args.port;
-            document.querySelector('input[name="debug"]').checked = args.debug;
-            pop(settingsMenu, 'in');
-        });
+        if (save === true) {
+            const newSettings = {
+                address: document.querySelector('input[name="address"]').value,
+                port: document.querySelector('input[name="port"]').value,
+                debug: document.querySelector('input[name="debug"]').checked,
+                http: document.querySelector('input[name="http"]').value
+            }
+        }
+        pop(settingsMenu, 'out');
     };
+
+    cancelButton.addEventListener('click', () => {
+        dismiss(false);
+    });
+    saveButton.addEventListener('click', () => {
+        dismiss(true);
+    });
+
 })();
 
 (function rightRail () {
@@ -84,8 +98,8 @@ document.addEventListener('connected', (e) => {
     };
 
     const pane = document.getElementById('rightRail');
-    const hud = CodeMirror(pane.querySelector('#hud'), codemirrorOptions);
-    const log = CodeMirror(pane.querySelector('#log'), codemirrorOptions);
+    const hud = CodeMirror(pane.querySelector('.hud'), codemirrorOptions);
+    const log = CodeMirror(pane.querySelector('.log'), codemirrorOptions);
     const cmd = pane.querySelector('#cmd');
 
     var clog = console.log;

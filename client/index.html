@@ -20,22 +20,29 @@
 		<div id="rightRail" class="poppable">
 			<div>
 				<div id="toolbar">
-					<div class="disconnected"><i class="fas fa-plug"></i></div>
-					<button id="settingsButton"><i class="fas fa-cog"></i></button>
+					<i class="fas fa-plug disconnected"></i>
+					<i class="fas fa-play"></i>
+					<i class="fas fa-stop"></i>
+					<i id="settingsButton" class="fas fa-cog"></i>
 				</div>
-				<div id="hud"></div>
-				<div id="log"></div>
+				<div class="raw"></div>
+				<div class="log"></div>
 			</div>
 			<input id="cmd" type="text">
 		</div>
 
 		<div id="settingsMenu" class="poppable">
 			<table>
-				<tr class="param"><td>Robot IP Address:</td><td><input type="text" name="address"/></td></tr>
-				<tr class="param"><td>Port:</td><td><input type="text" name="port"/></td></tr>
-				<tr class="param"><td>Debug:</td><td><input type="checkbox" name="debug"/></td></tr>
+				<tr class="param"><td>Robot IP Address</td><td><input type="text" name="address"/></td></tr>
+				<tr class="param"><td>Port</td><td><input type="text" name="port"/></td></tr>
+				<tr class="param"><td>Debug</td><td><input type="checkbox" name="debug"/></td></tr>
+				<tr class="param"><td>Birdseye HTTP Port</td><td><input type="text" name="http"/></td></tr>
+				<tr class="param"><td>Save Path</td><td><input type="text" name="savePath"/></td></tr>
 			</table>
-			<input type="button" value="Save" name="save"/>
+			<div class="buttons">
+				<div class="button" name="cancel">Cancel</div>
+				<div class="button" name="save">Save</div>
+			</div>
 		</div>
 
 		<!-- Birdseye Scripts-->
