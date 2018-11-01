@@ -9,12 +9,13 @@ const jsonfile = require('jsonfile')
 const glob = require('glob');
 const path = require('path');
 
+var json = jsonfile.readFileSync('config.json');
+
 // Get commandline arguments or their defaults
-args.address = args.address || 'localhost';
-args.port = args.port || 3708;
-args.debug = args.debug !== undefined;
-args.http = args.http || 8080;
-args.open = args.open !== undefined;
+args.address = json.address || 'localhost';
+args.port = json.port || 3708;
+args.debug = (args.debug || json.debug) !== undefined;
+args.http = json.http || 8080;
 
 if (!args.debug && args.address === undefined) {
     throw new Error("Must specify an address to use as the server. This should be the IP address of the robot controller running BirdseyeServer.")
@@ -109,4 +110,3 @@ if (args.debug) {
         console.log('CLIENT CONNECTED');
     });
 }
-

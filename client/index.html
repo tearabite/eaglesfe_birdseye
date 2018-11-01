@@ -17,15 +17,11 @@
 		<script src="../node_modules/codemirror/mode/javascript/javascript.js"></script>
 	</head>
 	<body style="font-family: sans-serif">
-		<div id="rightRail">
+		<div id="rightRail" class="poppable">
 			<div>
 				<div id="toolbar">
-					<div>
-						<i class="fas fa-plug"></i>
-					</div>
-					<button>
-						<i class="fas fa-cog" onclick="settingsMenu()"></i>
-					</button>
+					<div class="disconnected"><i class="fas fa-plug"></i></div>
+					<button id="settingsButton"><i class="fas fa-cog"></i></button>
 				</div>
 				<div id="hud"></div>
 				<div id="log"></div>
@@ -35,12 +31,9 @@
 
 		<div id="settingsMenu" class="poppable">
 			<table>
-				<tr class="param">
-					<td>Robot IP Address:</td><td><input type="text" value="192.168.1.100" name="address"/></td>
-				</tr>
-				<tr class="param">
-					<td>Port:</td><td><input type="text" value="3708" name="port"/></td>
-				</tr>
+				<tr class="param"><td>Robot IP Address:</td><td><input type="text" name="address"/></td></tr>
+				<tr class="param"><td>Port:</td><td><input type="text" name="port"/></td></tr>
+				<tr class="param"><td>Debug:</td><td><input type="checkbox" name="debug"/></td></tr>
 			</table>
 			<input type="button" value="Save" name="save"/>
 		</div>

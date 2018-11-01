@@ -6,14 +6,13 @@
             "request": "launch",
             "name": "Host (Debug)",
             "program": "${workspaceFolder}/server.js",
-            "args": [ "--debug", "--port=3708" ]
+            "args": [ "--debug" ]
         },
         {
             "type": "node",
             "request": "launch",
             "name": "Host",
             "program": "${workspaceFolder}/server.js",
-            "args": [ "--address=192.168.1.100", "--port=3708" ]
         }
     ]
 }

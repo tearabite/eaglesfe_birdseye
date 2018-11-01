@@ -124,7 +124,11 @@ input[type="text"] {
 }
 
 .poppable {
-    width: 0px;
-    height:0px;
+    visibility: hidden;
     opacity: 0;
+    transform: scale(0.1);
+}
+
+.connected {
+    color: green !important;
 }
