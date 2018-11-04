@@ -44,15 +44,21 @@ document.addEventListener('mouseover', (e) => {
     const settingsMenu = document.getElementById('settingsMenu');
     const saveButton = document.querySelector('#settingsMenu .buttons .button[name="save"]');
     const cancelButton = document.querySelector('#settingsMenu .buttons .button[name="cancel"]');
+    const addressBox = document.querySelector('input[name="address"]');
+    const debugCheckbox = document.querySelector('input[name="debug"]');
 
-    document.querySelector('input[name="debug"]').addEventListener('change', (e) => {
-        const addressBox = document.querySelector('input[name="address"]');
-        if (e.target.checked === true) {
+    function updateAddressBoxDisableState() {
+        if (debugCheckbox.checked === true) {
             addressBox.setAttribute('disabled', true);
             addressBox.value = 'localhost';
-        } else {
+        }
+        else {
             addressBox.removeAttribute('disabled');
         }
+    }
+
+    debugCheckbox.addEventListener('change', (e) => {
+        updateAddressBoxDisableState();
     });
 
     settingsButton.addEventListener('click', () => {
@@ -65,9 +71,10 @@ document.addEventListener('mouseover', (e) => {
 
     var reveal = () => {
         getConfiguration((args) => {
-            document.querySelector('input[name="address"]').value = args.address;
+            addressBox.value = args.address;
             document.querySelector('input[name="port"]').value = args.port;
-            document.querySelector('input[name="debug"]').checked = args.debug;
+            debugCheckbox.checked = args.debug;
+            updateAddressBoxDisableState();
             document.querySelector('input[name="open"]').checked = args.open;
             document.querySelector('input[name="http"]').value = args.http;
             pop(settingsMenu, 'in');
@@ -76,9 +83,9 @@ document.addEventListener('mouseover', (e) => {
     var dismiss = (save) => {
         if (save === true) {
             const newSettings = {
-                address: document.querySelector('input[name="address"]').value,
+                address: addressBox.value,
                 port: document.querySelector('input[name="port"]').value,
-                debug: document.querySelector('input[name="debug"]').checked,
+                debug: debugCheckbox.checked,
                 open: document.querySelector('input[name="open"]').checked,
                 http: document.querySelector('input[name="http"]').value
             }
