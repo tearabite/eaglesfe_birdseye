@@ -45,6 +45,16 @@ document.addEventListener('mouseover', (e) => {
     const saveButton = document.querySelector('#settingsMenu .buttons .button[name="save"]');
     const cancelButton = document.querySelector('#settingsMenu .buttons .button[name="cancel"]');
 
+    document.querySelector('input[name="debug"]').addEventListener('change', (e) => {
+        const addressBox = document.querySelector('input[name="address"]');
+        if (e.target.checked === true) {
+            addressBox.setAttribute('disabled', true);
+            addressBox.value = 'localhost';
+        } else {
+            addressBox.removeAttribute('disabled');
+        }
+    });
+
     settingsButton.addEventListener('click', () => {
         if (getComputedStyle(settingsMenu).visibility === 'visible') {
             pop(settingsMenu, 'out');

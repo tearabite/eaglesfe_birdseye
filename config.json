@@ -1,1 +1,1 @@
-{"address":"localhost","port":"3708","debug":true,"http":"8080"}
+{"address":"localhost","port":"3708","debug":true,"open":false,"http":"8080"}

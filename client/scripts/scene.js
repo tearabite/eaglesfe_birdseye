@@ -128,6 +128,7 @@ class RobotPlaceholder {
 }
 
 var robot = new RobotPlaceholder();
+robot.position.set(-60, 60, 0);
 scene.add(robot);
 
 function animate() {

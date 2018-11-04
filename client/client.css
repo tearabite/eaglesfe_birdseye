@@ -131,6 +131,17 @@ body>div>div, body>div>table {
     max-width: 35%;
 }
 
+#settingsMenu .paramDetail {
+    font-size: small;
+    text-align: right;
+    height: 2em;
+    vertical-align: top;
+}
+
+#settingsMenu .param {
+    height: 1em;
+}
+
 #settingsMenu .param td {
     width: 100%;
 }
