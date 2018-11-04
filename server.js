@@ -77,6 +77,8 @@ app.listen(configuration.http, function () {
 
 
 // --- DEBUG SERVER ---
+var socket;
+
 var stopServer = function () {
     if (socket !== undefined) {
         console.log('Stopping debug server.');
@@ -88,13 +90,6 @@ var stopServer = function () {
 
 var startServer = function () {
     console.log('Starting debug server.');
-    app.use('/debug', (req, res, next) => {
-        if (configuration.debug) {
-            res.sendFile(path.join(__dirname, 'producer', req.url));
-        } else {
-            next();
-        }
-    });
 
     socket = new WebSocketServer({ port: configuration.port });
     socket.broadcast = function broadcast(data, originator) {
@@ -118,7 +113,14 @@ var restartServer = function () {
     startServer();
 }
 
+app.use('/debug', (req, res, next) => {
+    if (configuration.debug) {
+        res.sendFile(path.join(__dirname, 'producer', req.url));
+    } else {
+        next();
+    }
+});
+
 if (configuration.debug) {
-    var socket;
     restartServer();
 }
