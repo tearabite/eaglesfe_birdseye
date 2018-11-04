@@ -1,79 +1,55 @@
 #!/usr/bin/env node
 
-const args = require('yargs').argv
+const fs = require('fs');
 const express = require('express');
 const bodyParser = require('body-parser')
 const app = express();
 const WebSocketServer = require('ws').Server;
 const opn = require('opn');
 const jsonfile = require('jsonfile')
-const glob = require('glob');
 const path = require('path');
+const utility = require('./utility');
 
-var json = jsonfile.readFileSync('config.json');
+var configuration = {
+    debug: true,
+    address: 'localhost',
+    port: 8081,
+    http: 8080,
+    open: true
+};
 
-// Get commandline arguments or their defaults
-args.debug = (args.debug || json.debug) !== undefined;
+if (fs.existsSync(path.join(__dirname, './config.json'))) {
+    const config = jsonfile.readFileSync('config.json');
+    configuration.debug     = config.debug === true;
+    configuration.address   = config.address || configuration.address;
+    configuration.port      = config.port || configuration.port;
+    configuration.http      = config.http || configuration.http;
+    configuration.open = config.open === true;
 
-args.address = args.debug ? 'localhost' : (json.address || 'localhost');
-args.port = json.port || 3708;
-args.http = json.http || 8080;
-
-if (!args.debug && args.address === undefined) {
-    throw new Error("Must specify an address to use as the server. This should be the IP address of the robot controller running BirdseyeServer.")
+} else {
+    jsonfile.writeFileSync('config.json', configuration);
 }
 
-var assets = {};
-{
-    // Attempt to load or verify basic field model asset information.
-    let obj = jsonfile.readFileSync(__dirname + '/client/models/assets.json');
-    {
-        if (obj === undefined) {
-            console.error("No generic field assets defined. Check your assets.json file.");
-        } else {
-            assets.generic = obj;
-        }
-    };
+var assets = utility.loadAssets();
 
-    // Attempt to locate and load game specific asset information.
-    let files = glob.sync('client/models/games/**/config.json');
-    if (files.length === 0) {
-        console.warn("No games found in the games directory.")
-    } else {
-        assets.games = assets.games || [];
-        files.forEach(config => {
-            json = jsonfile.readFileSync(config);
-            const isValid =
-                json !== undefined
-                && json.name !== undefined
-                && json.season != undefined
-                && json.assets != undefined
-                && json.assets.length > 0;
-            if (isValid === true) {
-                console.log(`Found game \'${json.name}\'...`);
-                json.assets.forEach(asset => {
-                    asset.path = path.relative('client', path.join(path.dirname(config), asset.path))
-                });
-                assets.games.push(json);
-            }
-        });
-    }
-}
-
-console.log(`Starting Birdseye in ${args.debug ? 'debug' : 'client'} mode...`);
+console.log(`Starting Birdseye in ${configuration.debug ? 'DEBUG' : 'CLIENT'} mode...`);
 
 // Start an HTTP server so we can access the relevant HTML frontend pages.
 app.use(bodyParser.json())
 app.post('*configuration', (req, res, next) => {
-    Object.assign(args, req.body);
-    restartServer();
+    Object.assign(configuration, req.body);
+    if (configuration.debug === false) {
+        stopServer();
+    } else {
+        restartServer();
+    }
+
     jsonfile.writeFile(path.join(__dirname, 'config.json'), req.body);
     res.end();
 });
 
 app.get('*configuration', (req, res, next) => {
-    const { _, $0, ...otherKeys } = args;
-    res.json(otherKeys);
+    res.json(configuration);
     res.end();
 });
 
@@ -85,41 +61,64 @@ app.get('*assets', (req, res, next) => {
 app.use('/scripts', express.static(path.join(__dirname, 'scripts')));
 app.use('/client', express.static(path.join(__dirname, 'client')));
 app.use('/node_modules', express.static(path.join(__dirname, 'node_modules')));
-app.listen(args.http, function () {
-    const clientUrl = `http:localhost:${args.http}/client/`;
-    const producerUrl = `http:localhost:${args.http}/debug/`;
+app.listen(configuration.http, function () {
+    const clientUrl = `http:localhost:${configuration.http}/client/`;
+    const producerUrl = `http:localhost:${configuration.http}/debug/`;
 
-    if (args.open) {
+    if (configuration.open === true) {
         opn(clientUrl);
 
-        if (args.debug) {
+        if (configuration.debug) {
             opn(producerUrl);
         }
     }
     console.log(`Birdseye is now running. You can access it at '${clientUrl}.`);
 });
 
-// If we're in debug mode, start a websocket server for the two apps to use.
-if (args.debug) {
-    app.use('/debug', express.static(path.join(__dirname, 'producer')));
 
-    function restartServer() {
-        socket = new WebSocketServer({ port: args.port });
-        socket.broadcast = function broadcast(data, originator) {
-            socket.clients.forEach(function each(client) {
-                if (client !== originator && client.readyState === 1) {
-                    client.send(data);
-                }
-            });
-        };
+// --- DEBUG SERVER ---
+var stopServer = function () {
+    if (socket !== undefined) {
+        console.log('Stopping debug server.');
+        app.use('/debug', (req, res, next) => { res.end(); });
 
-        socket.on('connection', function (ws, req) {
-            ws.onmessage = function (message) {
-                socket.broadcast(message.data, ws);
-                console.log(message.data);
-            };
-            console.log('CLIENT CONNECTED');
-        });
+        socket.close()
     }
+}
+
+var startServer = function () {
+    console.log('Starting debug server.');
+    app.use('/debug', (req, res, next) => {
+        if (configuration.debug) {
+            res.sendFile(path.join(__dirname, 'producer', req.url));
+        } else {
+            next();
+        }
+    });
+
+    socket = new WebSocketServer({ port: configuration.port });
+    socket.broadcast = function broadcast(data, originator) {
+        socket.clients.forEach(function each(client) {
+            if (client !== originator && client.readyState === 1) {
+                client.send(data);
+            }
+        });
+    };
+    socket.on('connection', function (ws, req) {
+        ws.onmessage = function (message) {
+            socket.broadcast(message.data, ws);
+            console.log(message.data);
+        };
+        console.log('CLIENT CONNECTED');
+    });
+}
+
+var restartServer = function () {
+    stopServer();
+    startServer();
+}
+
+if (configuration.debug) {
+    var socket;
     restartServer();
 }

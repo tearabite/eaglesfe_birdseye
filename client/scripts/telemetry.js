@@ -58,6 +58,7 @@ document.addEventListener('mouseover', (e) => {
             document.querySelector('input[name="address"]').value = args.address;
             document.querySelector('input[name="port"]').value = args.port;
             document.querySelector('input[name="debug"]').checked = args.debug;
+            document.querySelector('input[name="open"]').checked = args.open;
             document.querySelector('input[name="http"]').value = args.http;
             pop(settingsMenu, 'in');
         });
@@ -68,6 +69,7 @@ document.addEventListener('mouseover', (e) => {
                 address: document.querySelector('input[name="address"]').value,
                 port: document.querySelector('input[name="port"]').value,
                 debug: document.querySelector('input[name="debug"]').checked,
+                open: document.querySelector('input[name="open"]').checked,
                 http: document.querySelector('input[name="http"]').value
             }
             setConfiguration(newSettings);
