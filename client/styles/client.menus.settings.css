@@ -1,0 +1,69 @@
+#settingsMenu {
+    left: calc((100% - 25% - 400px) / 2);
+    width: 400px;
+    height: 300px;
+    top: calc((100% - 300px) / 2);
+    max-width: 40%;
+}
+
+#settingsMenu .paramDetail {
+    font-size: small;
+    text-align: right;
+    height: 2em;
+    vertical-align: top;
+}
+
+#settingsMenu .param {
+    height: 1em;
+}
+
+#settingsMenu .param td {
+    width: 100%;
+}
+
+#settingsMenu .param td:last-child>* {
+    font-size: 12pt;
+    width: 120px;
+}
+
+#settingsMenu .param>input {
+    bottom: 0;
+    position: absolute;
+    margin: 15px;
+    width: 40%;
+}
+
+#settingsMenu .buttons {
+    top: unset;
+    height: 30px;
+    bottom: 0;
+}
+
+#settingsMenu .buttons .button {
+    position: absolute;
+    width: 100px;
+    text-align: center;
+    border-style: solid;
+    border-radius: 10px;
+    border-width: 1px;
+    border-color: gray;
+    padding: 5px;
+    cursor: default;
+}
+
+#settingsMenu .buttons .button:hover {
+    background: #eeeeee;
+}
+
+#settingsMenu .buttons .button:hover:active {
+    background: #d2d7e4;
+}
+
+#settingsMenu .buttons .button:first-child {
+    left: 0px;
+}
+
+#settingsMenu .buttons .button:last-child {
+    right: 0px;
+}
+

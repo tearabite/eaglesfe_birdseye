@@ -131,6 +131,14 @@ var robot = new RobotPlaceholder();
 robot.position.set(-60, 60, 0);
 scene.add(robot);
 
+// Target Line
+var target = new THREE.Vector3(0, 0, 0);
+var material = new THREE.LineBasicMaterial({ color: 0xff0000 });
+var geometry = new THREE.Geometry();
+geometry.vertices = [new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, 0)];
+var line = new THREE.Line( geometry, material );
+scene.add(line);
+
 function animate() {
     requestAnimationFrame( animate );
 
@@ -141,10 +149,17 @@ function animate() {
         const roll = THREE.Math.degToRad(telemetry.roll);
         const heading = THREE.Math.degToRad(telemetry.heading);
         robot.rotation.setFromVector3(new THREE.Vector3(roll, pitch, heading));
+
+        line.geometry.vertices[1].setX(telemetry.x);
+        line.geometry.vertices[1].setY(telemetry.y);
+        line.geometry.verticesNeedUpdate = true;
     }
 
 	renderer.render( scene, camera );
 }
 
 document.body.appendChild(renderer.domElement);
+renderer.domElement.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+});
 animate();

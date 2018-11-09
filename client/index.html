@@ -3,7 +3,11 @@
 	<head>
 		<title>Birdseye Viewer</title>
 		<meta charset="utf-8">
-		<link rel="stylesheet" href="./client.css">
+		<link rel="stylesheet" href="./styles/client.css">
+		<link rel="stylesheet" href="./styles/client.menus.css">
+		<link rel="stylesheet" href="./styles/client.menus.rightrail.css">
+		<link rel="stylesheet" href="./styles/client.menus.settings.css">
+
 		<link rel="stylesheet" href="../node_modules/codemirror/lib/codemirror.css">
 		<link rel="stylesheet" href="../node_modules/@fortawesome/fontawesome-free/css/all.css">
 
@@ -18,8 +22,8 @@
 		<script src="../node_modules/codemirror/mode/javascript/javascript.js"></script>
 	</head>
 	<body style="font-family: sans-serif">
-		<div id="rightRail" class="poppable">
-			<div>
+		<div id="rightRail" class="menu">
+			<div class="container">
 				<div id="toolbar">
 					<i id="connect" class="fas fa-plug disconnected"></i>
 					<i class="fas fa-play"></i>
@@ -32,8 +36,8 @@
 			<input id="cmd" type="text">
 		</div>
 
-		<div id="settingsMenu" class="poppable">
-			<table>
+		<div id="settingsMenu" class="menu">
+			<table class="param-table-active container">
 				<tr class="param"><td>Robot IP Address</td><td><input type="text" name="address"/></td></tr>
 				<tr class="param"><td>Port</td><td><input type="text" name="port"/></td></tr>
 				<tr class="param"><td>Debug</td><td><input type="checkbox" name="debug"/></td></tr>
@@ -42,7 +46,7 @@
 				<tr class="paramDetail"><td></td><td>Requires restart.</td></tr>
 				<tr class="param"><td>Save Path</td><td><input type="text" name="savePath"/></td></tr>
 			</table>
-			<div class="buttons">
+			<div class="buttons container">
 				<div class="button" name="cancel">Cancel</div>
 				<div class="button" name="save">Save</div>
 			</div>

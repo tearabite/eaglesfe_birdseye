@@ -1,35 +1,12 @@
 
 pop = (element, direction) => {
-    element.animate([
-        {
-            opacity: 0,
-            transform: 'scale(0)',
-            visibility: 'hidden'
-        },
-        {
-            opacity: 0,
-            transform: 'scale(0.7)',
-            visibility: 'visible'
-        },
-        {
-            transform: 'scale(1.2)',
-            opacity: 1,
-            easing: 'ease-out',
-            visibility: 'visible'
-        },
-        {
-            transform: 'scale(1.0)',
-            opacity: 1,
-            easing: 'ease-in',
-            visibility: 'visible'
-
-        }],
-        {
-            duration: 350,
-            fill: 'both',
-            direction: (direction === 'in' ? 'normal' : 'reverse'),
-        })
-    ;
+    if (direction === 'in') {
+        element.classList.remove('closed');
+        element.classList.add('open');
+    } else {
+        element.classList.add('closed');
+        element.classList.remove('open');
+    }
 };
 
 var controls;
@@ -132,7 +109,8 @@ document.addEventListener('mouseover', (e) => {
                     console.log(`CONNECTED! - ${args.address}:${args.port}.`);
                 }, (message) => {
                     hud.setValue(JSON.stringify(message, null, 2));
-                    telemetry = message;
+                    telemetry = telemetry || {};
+                    Object.assign(telemetry, message);
                 }, () => {
                     connectButton.classList.remove('connected');
                     connectButton.classList.remove('connecting');

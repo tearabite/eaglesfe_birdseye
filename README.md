@@ -23,25 +23,27 @@ Below is a quick reference for the JSON data the Birdseye Viewer consumes. For b
 
 -Example-
 
-    {
-        x: 34.2,
-        y: 55.1,
-        z: 0.5
-        pitch: 0,
-        roll: 0,
-        heading: 153,
-        input: {
-            x: 0.4,
-            y: 0,
-            z: 1
-        },
-        target: {
-            x: 40,
-            y: 60,
-            z: 0,
-            heading: 90
-        }
+```json
+{
+    x: 34.2,
+    y: 55.1,
+    z: 0.5
+    pitch: 0,
+    roll: 0,
+    heading: 153,
+    input: {
+        x: 0.4,
+        y: 0,
+        z: 1
+    },
+    target: {
+        x: 40,
+        y: 60,
+        z: 0,
+        heading: 90
     }
+}
+```
 
 
 ## **Extensibility**
