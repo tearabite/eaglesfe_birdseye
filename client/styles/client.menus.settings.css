@@ -1,9 +1,8 @@
 #settingsMenu {
-    left: calc((100% - 25% - 400px) / 2);
-    width: 400px;
-    height: 300px;
-    top: calc((100% - 300px) / 2);
-    max-width: 40%;
+    left: 10%;
+    top: 20%;
+    right: 35%;
+    bottom: 20%;
 }
 
 #settingsMenu .paramDetail {
@@ -11,10 +10,6 @@
     text-align: right;
     height: 2em;
     vertical-align: top;
-}
-
-#settingsMenu .param {
-    height: 1em;
 }
 
 #settingsMenu .param td {
@@ -35,8 +30,10 @@
 
 #settingsMenu .buttons {
     top: unset;
-    height: 30px;
+    height: 35px;
     bottom: 0;
+    right: 0;
+    left: 0;
 }
 
 #settingsMenu .buttons .button {
@@ -67,3 +64,28 @@
     right: 0px;
 }
 
+#settingsMenu .settingsGroup {
+    border-color: gray;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 10px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: fit-content;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+#settingsMenu .settingsGroup .header {
+    font-weight: bold;
+    font-size: 14pt;
+    background: #9E9E9E;
+    color: white;
+    padding-block-start: 5px;
+    text-align: center;
+}
+
+#settingsMenu .container {
+    overflow: scroll;
+}

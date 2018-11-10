@@ -134,5 +134,14 @@ document.addEventListener('mouseover', (e) => {
         cmd.value = '';
     });
 
+    function noScroll(e) {
+        if (e.target.tagName.toUpperCase() !== 'CANVAS') {
+            e.preventDefault();
+        }
+    }
+    document.addEventListener('touchmove', noScroll, { passive: false});
+
     pop(pane, 'in');
 })();
+
+
