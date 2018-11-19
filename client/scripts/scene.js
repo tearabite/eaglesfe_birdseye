@@ -66,14 +66,7 @@ function animate() {
     requestAnimationFrame(animate);
 
     if (telemetry) {
-        const position = telemetry.position;
-        if (position) {
-            robot.object.position.set(position.x, position.y, 0);
-            const pitch = THREE.Math.degToRad(position.pitch * -1);
-            const roll = THREE.Math.degToRad(position.roll * -1);
-            const heading = THREE.Math.degToRad(position.heading);
-            robot.object.rotation.setFromVector3(new THREE.Vector3(roll, pitch, heading));
-        }
+        robot.update(telemetry);
 
         const fTarget = telemetry.target && telemetry.target.field;
         if (fTarget) {
@@ -113,7 +106,6 @@ var settingsUpdated = function (args) {
     robot.axes = args.robotAxes === true;
     robot.grid = args.robotGrid === true;
     field.axes = args.fieldAxes === true;
-
 };
 
 getConfiguration(args => {

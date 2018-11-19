@@ -64,4 +64,15 @@ class RobotPlaceholder {
     get object() {
         return this.robot;
     }
+
+    update (telemetry) {
+        const position = telemetry.position;
+        if (position) {
+            this.object.position.set(position.x, position.y, 0);
+            const pitch = THREE.Math.degToRad(position.pitch * -1);
+            const roll = THREE.Math.degToRad(position.roll * -1);
+            const heading = THREE.Math.degToRad(position.heading);
+            this.object.rotation.setFromVector3(new THREE.Vector3(roll, pitch, heading));
+        }
+    }
 }
