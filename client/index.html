@@ -46,9 +46,15 @@
 				</table>
 				<table class="settingsGroup">
 					<tr class="header"><td colspan="2">Application</td></tr>
-					<tr class="param"><td>Debug</td><td><input type="checkbox" name="debug"/></td></tr>
-					<tr class="param"><td>Open Browser on Launch</td><td><input type="checkbox" name="open"/></td></tr>
 					<tr class="param"><td>Save Path</td><td><input type="text" name="savePath"/></td></tr>
+				</table>
+				<table class="settingsGroup">
+					<tr class="header"><td colspan="2">Visuals</td></tr>
+					<tr class="param"><td>Robot Grid</td><td><input type="checkbox" name="robotGrid"/></td></tr>
+					<tr class="param"><td>Robot Axes</td><td><input type="checkbox" name="robotAxes"/></td></tr>
+					<tr class="param"><td>Field Axes</td><td><input type="checkbox" name="fieldAxes"/></td></tr>
+					<tr class="param"><td>Target Indicator</td><td><input type="checkbox" name="targetIndicator"/></td></tr>
+					<tr class="param"><td>Target Indicator (Relative to Robot)</td><td><input type="checkbox" name="robotTargetIndicator"/></td></tr>
 				</table>
 			</div>
 
@@ -62,6 +68,9 @@
 		<!-- Birdseye Scripts-->
 		<script src="../scripts/connect.js"></script>
 		<script src="./scripts/telemetry.js"></script>
+		<script src="./scripts/robot.js"></script>
+		<script src="./scripts/visuals.js"></script>
+		<script src="./scripts/field.js"></script>
 		<script src="./scripts/scene.js"></script>
 	</body>
 </html>

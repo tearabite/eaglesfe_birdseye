@@ -15,6 +15,11 @@ function setConfiguration(args) {
     Http.open("POST", 'configuration');
     Http.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     Http.send(JSON.stringify(args));
+
+    if (settingsUpdated !== undefined) {
+        settingsUpdated(args);
+    }
+
 }
 
 function connect(address, port, onopen, onmessage, onclose, onerror) {

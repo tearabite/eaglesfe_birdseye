@@ -21,22 +21,6 @@ document.addEventListener('mouseover', (e) => {
     const settingsMenu = document.getElementById('settingsMenu');
     const saveButton = document.querySelector('#settingsMenu .buttons .button[name="save"]');
     const cancelButton = document.querySelector('#settingsMenu .buttons .button[name="cancel"]');
-    const addressBox = document.querySelector('input[name="address"]');
-    const debugCheckbox = document.querySelector('input[name="debug"]');
-
-    function updateAddressBoxDisableState() {
-        if (debugCheckbox.checked === true) {
-            addressBox.setAttribute('disabled', true);
-            addressBox.value = 'localhost';
-        }
-        else {
-            addressBox.removeAttribute('disabled');
-        }
-    }
-
-    debugCheckbox.addEventListener('change', (e) => {
-        updateAddressBoxDisableState();
-    });
 
     settingsButton.addEventListener('click', () => {
         if (getComputedStyle(settingsMenu).visibility === 'visible') {
@@ -48,25 +32,43 @@ document.addEventListener('mouseover', (e) => {
 
     var reveal = () => {
         getConfiguration((args) => {
-            addressBox.value = args.address;
-            document.querySelector('input[name="port"]').value = args.port;
-            debugCheckbox.checked = args.debug;
-            updateAddressBoxDisableState();
-            document.querySelector('input[name="open"]').checked = args.open;
-            document.querySelector('input[name="http"]').value = args.http;
+            let settings = settingsMenu.querySelectorAll('.param input');
+            settings.forEach(setting => {
+                let key = setting.getAttribute('name');
+                let value = args[key];
+                if (value !== undefined) {
+                    switch (setting.getAttribute('type')) {
+                        case 'text':
+                            setting.value = value;
+                            break;
+                        case 'checkbox':
+                            setting.checked = value;
+                            break;
+                    }
+                    setting.value = value;
+                }
+            })
             pop(settingsMenu, 'in');
         });
     };
     var dismiss = (save) => {
         if (save === true) {
-            const newSettings = {
-                address: addressBox.value,
-                port: document.querySelector('input[name="port"]').value,
-                debug: debugCheckbox.checked,
-                open: document.querySelector('input[name="open"]').checked,
-                http: document.querySelector('input[name="http"]').value
-            }
-            setConfiguration(newSettings);
+            let settings = settingsMenu.querySelectorAll('.param input');
+            let newArgs = {};
+            settings.forEach(setting => {
+                let key = setting.getAttribute('name');
+                let value;
+                switch (setting.getAttribute('type')) {
+                    case 'text':
+                        value = setting.value
+                        break;
+                    case 'checkbox':
+                        value = setting.checked;
+                        break;
+                }
+                newArgs[key] = value;
+            })
+            setConfiguration(newArgs);
         }
         pop(settingsMenu, 'out');
     };
