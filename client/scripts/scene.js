@@ -62,33 +62,41 @@ robot.object.position.set(-60, 60, 0);
 scene.add(robot.object);
 
 
+var refreshRate = 0.250;
+var clock = new THREE.Clock(true);
+var timeUntilUpdate = 0.0;
 function animate() {
     requestAnimationFrame(animate);
 
-    if (telemetry) {
-        robot.update(telemetry);
+    timeUntilUpdate -= clock.getDelta();
+    if (timeUntilUpdate <= 0) {
+        timeUntilUpdate = refreshRate;
 
-        const fTarget = telemetry.target && telemetry.target.field;
-        if (fTarget) {
-            const x = fTarget.x || 0;
-            const y = fTarget.y || 0;
-            const z = fTarget.z || 0;
-            targetPin.position.set(x, y, z);
-            targetPin.visible = true;
-        } else {
-            targetPin.visible = false;
-        }
+        if (telemetry) {
+            robot.update(telemetry);
 
-        const rTarget = telemetry.target && telemetry.target.robot;
-        if (fTarget) {
-            const x = rTarget.x || 0;
-            const y = rTarget.y || 0;
-            const z = rTarget.z || 0;
-            const transformed = robot.localToWorld(new THREE.Vector3(x, y, z));
-            robotTargetPin.position.set(transformed.x, transformed.y, 4);
-            robotTargetPin.visible = true;
-        } else {
-            robotTargetPin.visible = false;
+            const fTarget = telemetry.target && telemetry.target.field;
+            if (fTarget) {
+                const x = fTarget.x || 0;
+                const y = fTarget.y || 0;
+                const z = fTarget.z || 0;
+                targetPin.position.set(x, y, z);
+                targetPin.visible = true;
+            } else {
+                targetPin.visible = false;
+            }
+
+            const rTarget = telemetry.target && telemetry.target.robot;
+            if (fTarget) {
+                const x = rTarget.x || 0;
+                const y = rTarget.y || 0;
+                const z = rTarget.z || 0;
+                const transformed = robot.object.localToWorld(new THREE.Vector3(x, y, z));
+                robotTargetPin.position.set(transformed.x, transformed.y, 4);
+                robotTargetPin.visible = true;
+            } else {
+                robotTargetPin.visible = false;
+            }
         }
     }
 
@@ -106,6 +114,7 @@ var settingsUpdated = function (args) {
     robot.axes = args.robotAxes === true;
     robot.grid = args.robotGrid === true;
     field.axes = args.fieldAxes === true;
+    refreshRate = args.refreshRate || refreshRate;
 };
 
 getConfiguration(args => {
