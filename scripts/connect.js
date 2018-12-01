@@ -14,7 +14,7 @@ function setConfiguration(args) {
     const Http = new XMLHttpRequest();
     Http.open("POST", 'configuration');
     Http.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    Http.send(JSON.stringify(args));
+    Http.send(JSON.stringify(args, null, 4));
 
     if (settingsUpdated !== undefined) {
         settingsUpdated(args);

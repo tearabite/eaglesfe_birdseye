@@ -12,8 +12,7 @@ var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHei
 camera.up = new THREE.Vector3(0,0,1);
 camera.aspect = window.innerWidth / window.innerHeight;
 camera.setViewOffset(window.innerWidth * .75, window.innerHeight, 0, 0, window.innerWidth, window.innerHeight);
-camera.position.set(0, -185, 135);
-
+camera.position.set(0, 0, 135);
 window.addEventListener('resize', function () {
     renderer.setSize(window.innerWidth, window.innerHeight);
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -65,6 +64,7 @@ scene.add(robot.object);
 var refreshRate = 0.250;
 var clock = new THREE.Clock(true);
 var timeUntilUpdate = 0.0;
+var post0, postn;
 function animate() {
     requestAnimationFrame(animate);
 
@@ -73,31 +73,45 @@ function animate() {
         timeUntilUpdate = refreshRate;
 
         if (telemetry) {
-            robot.update(telemetry);
+            post0 = postn;
+            postn = telemetry.position;
 
-            const fTarget = telemetry.target && telemetry.target.field;
-            if (fTarget) {
-                const x = fTarget.x || 0;
-                const y = fTarget.y || 0;
-                const z = fTarget.z || 0;
-                targetPin.position.set(x, y, z);
-                targetPin.visible = true;
-            } else {
-                targetPin.visible = false;
-            }
+            // const fTarget = telemetry.target && telemetry.target.field;
+            // if (fTarget) {
+            //     const x = fTarget.x || 0;
+            //     const y = fTarget.y || 0;
+            //     const z = fTarget.z || 0;
+            //     targetPin.position.set(x, y, z);
+            //     targetPin.visible = true;
+            // } else {
+            //     targetPin.visible = false;
+            // }
 
-            const rTarget = telemetry.target && telemetry.target.robot;
-            if (fTarget) {
-                const x = rTarget.x || 0;
-                const y = rTarget.y || 0;
-                const z = rTarget.z || 0;
-                const transformed = robot.object.localToWorld(new THREE.Vector3(x, y, z));
-                robotTargetPin.position.set(transformed.x, transformed.y, 4);
-                robotTargetPin.visible = true;
-            } else {
-                robotTargetPin.visible = false;
+            // const rTarget = telemetry.target && telemetry.target.robot;
+            // if (fTarget) {
+            //     const x = rTarget.x || 0;
+            //     const y = rTarget.y || 0;
+            //     const z = rTarget.z || 0;
+            //     const transformed = robot.object.localToWorld(new THREE.Vector3(x, y, z));
+            //     robotTargetPin.position.set(transformed.x, transformed.y, 4);
+            //     robotTargetPin.visible = true;
+            // } else {
+            //     robotTargetPin.visible = false;
+            // }
+        }
+    } else if (post0 && postn) {
+        const t = Math.min(1, (refreshRate - timeUntilUpdate)/refreshRate);
+        const post = {
+            position: {
+                x: THREE.Math.lerp(post0.x, postn.x, t),
+                y: THREE.Math.lerp(post0.y, postn.y, t),
+                z: THREE.Math.lerp(post0.z, postn.z, t),
+                pitch: THREE.Math.lerp(post0.pitch, postn.pitch, t),
+                roll: THREE.Math.lerp(post0.roll, postn.roll, t),
+                heading: THREE.Math.lerp(post0.heading, postn.heading, t)
             }
         }
+        robot.update(post);
     }
 
 	renderer.render( scene, camera );

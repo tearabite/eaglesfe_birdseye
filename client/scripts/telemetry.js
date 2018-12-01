@@ -110,7 +110,9 @@ document.addEventListener('mouseover', (e) => {
                     connectButton.classList.add('connected');
                     console.log(`CONNECTED! - ${args.address}:${args.port}.`);
                 }, (message) => {
+                    const oldPos = hud.getScrollInfo().top
                     hud.setValue(JSON.stringify(message, null, 2));
+                    hud.scrollTo(0, oldPos);
                     telemetry = telemetry || {};
                     Object.assign(telemetry, message);
                 }, () => {
