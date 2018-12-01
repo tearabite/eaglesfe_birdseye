@@ -1,3 +1,5 @@
 client/models/parts
 node_modules
 client/models/games/
+/*/**/*.nsp
+config.json
