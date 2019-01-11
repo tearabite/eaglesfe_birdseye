@@ -47,15 +47,6 @@ scene.add(spotlight);
 
 var field = new Field();
 
-var targetPin = new TargetPin(0xffff00);
-targetPin.visible = false;
-scene.add(targetPin);
-
-var robotTargetPin = new TargetPin(0xffffff);
-robotTargetPin.visible = false;
-robotTargetPin.translateZ(4);
-scene.add(robotTargetPin);
-
 var robot = new RobotPlaceholder();
 robot.object.position.set(-60, 60, 0);
 scene.add(robot.object);
@@ -73,8 +64,14 @@ function animate() {
         timeUntilUpdate = refreshRate;
 
         if (telemetry) {
-            post0 = postn;
-            postn = telemetry.position;
+            if (telemetry.robot) {
+                post0 = postn;              // Position of the robot last time we got an updated keyframe (telemetry payload)
+                postn = telemetry.robot;    // Position of the robot according to the most recent keyframe (telemetry payload)s    
+            }
+
+            if (telemetry.targets) {
+                updateTargets(telemetry.targets);
+            }
 
             // const fTarget = telemetry.target && telemetry.target.field;
             // if (fTarget) {
@@ -121,8 +118,8 @@ document.body.appendChild(renderer.domElement);
 renderer.domElement.addEventListener('touchmove', (e) => {
     e.preventDefault();
 });
-animate();
 
+animate();
 
 var settingsUpdated = function (args) {
     robot.axes = args.robotAxes === true;

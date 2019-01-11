@@ -1,6 +1,5 @@
 class TargetPin {
     constructor(color) {
-        this.color = color;
         let pinMaterial = new THREE.MeshPhongMaterial({ color: color });
 
         const coneHeight = 3;
@@ -17,10 +16,42 @@ class TargetPin {
         cylinder = new THREE.Mesh(cylinder, pinMaterial);
         cone = new THREE.Mesh(cone, pinMaterial);
 
-        let pin = new THREE.Group();
-        pin.add(cylinder);
-        pin.add(cone);
+        this.pin = new THREE.Group();
+        this.pin.add(cylinder);
+        this.pin.add(cone);
 
-        return pin;
+        return this;
+    }
+
+    get color () {
+        return this.pin.children[0].material.color;
+    }
+
+    set color (value) {
+        this.pin.children.forEach(c => c.material.color = value);
+    }
+
+    get position () {
+
+    }
+
+    set position(value) {
+        this.pin.position.set(value.x, value.y, value.z);
+    }
+}
+var targets = [];
+
+function updateTargets(t) {
+    for (let i = 0; i < t.length; i++) {
+        let pin = targets[i];
+        if (pin === undefined) {
+            pin = new TargetPin(t.color); 
+            targets.push(pin);
+            scene.add(pin.pin);
+        }
+        pin.position = { x: t[i].x || 0, y: t[i].y || 0, z: t[i].z || 0 };
+        if (t[i].color) {
+            pin.color = new THREE.Color(t[i].color);
+        }
     }
 }
