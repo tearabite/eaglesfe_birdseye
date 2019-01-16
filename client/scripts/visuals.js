@@ -31,8 +31,9 @@ class TargetPin {
         this.pin.children.forEach(c => c.material.color = value);
     }
 
-    get position () {
-
+    get position() {
+        let position = this.pin.position;
+        return { x: position.x, y: position.y, z: position.z };
     }
 
     set position(value) {
@@ -42,10 +43,14 @@ class TargetPin {
 var targets = [];
 
 function updateTargets(t) {
+    while (targets.length > t.length) {
+        scene.remove(targets.pop().pin);
+    }
+
     for (let i = 0; i < t.length; i++) {
         let pin = targets[i];
         if (pin === undefined) {
-            pin = new TargetPin(t.color); 
+            pin = new TargetPin(t.color);
             targets.push(pin);
             scene.add(pin.pin);
         }
@@ -54,4 +59,10 @@ function updateTargets(t) {
             pin.color = new THREE.Color(t[i].color);
         }
     }
+}
+
+function enableTargets(value) {
+    targets.forEach(target => {
+        target.pin.visible = value;
+    })
 }

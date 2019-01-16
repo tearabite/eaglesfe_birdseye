@@ -37,11 +37,14 @@ console.log(`Starting Birdseye in ${configuration.debug ? 'DEBUG' : 'CLIENT'} mo
 // Start an HTTP server so we can access the relevant HTML frontend pages.
 app.use(bodyParser.json())
 app.post('*configuration', (req, res, next) => {
+    let portChanged = configuration.port != req.body.port;
     Object.assign(configuration, req.body);
-    if (configuration.debug === false) {
-        stopServer();
-    } else {
-        restartServer();
+    if (portChanged) {
+        if (configuration.debug === false) {
+            stopServer();
+        } else {
+            restartServer();
+        }
     }
 
     jsonfile.writeFile(path.join(__dirname, 'config.json'), req.body);

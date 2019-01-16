@@ -66,35 +66,12 @@ function animate() {
         if (telemetry) {
             if (telemetry.robot) {
                 post0 = postn;              // Position of the robot last time we got an updated keyframe (telemetry payload)
-                postn = telemetry.robot;    // Position of the robot according to the most recent keyframe (telemetry payload)s    
+                postn = telemetry.robot;    // Position of the robot according to the most recent keyframe (telemetry payload)s
             }
 
             if (telemetry.targets) {
                 updateTargets(telemetry.targets);
             }
-
-            // const fTarget = telemetry.target && telemetry.target.field;
-            // if (fTarget) {
-            //     const x = fTarget.x || 0;
-            //     const y = fTarget.y || 0;
-            //     const z = fTarget.z || 0;
-            //     targetPin.position.set(x, y, z);
-            //     targetPin.visible = true;
-            // } else {
-            //     targetPin.visible = false;
-            // }
-
-            // const rTarget = telemetry.target && telemetry.target.robot;
-            // if (fTarget) {
-            //     const x = rTarget.x || 0;
-            //     const y = rTarget.y || 0;
-            //     const z = rTarget.z || 0;
-            //     const transformed = robot.object.localToWorld(new THREE.Vector3(x, y, z));
-            //     robotTargetPin.position.set(transformed.x, transformed.y, 4);
-            //     robotTargetPin.visible = true;
-            // } else {
-            //     robotTargetPin.visible = false;
-            // }
         }
     } else if (post0 && postn) {
         const t = Math.min(1, (refreshRate - timeUntilUpdate)/refreshRate);
@@ -126,6 +103,7 @@ var settingsUpdated = function (args) {
     robot.grid = args.robotGrid === true;
     field.axes = args.fieldAxes === true;
     refreshRate = args.refreshRate || refreshRate;
+    enableTargets(args.targetIndicators === true);
 };
 
 getConfiguration(args => {
