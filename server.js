@@ -93,6 +93,7 @@ var stopServer = function () {
 
 var startServer = function () {
     console.log('Starting debug server.');
+    app.use('/debug', express.static(path.join(__dirname, 'producer')));
 
     socket = new WebSocketServer({ port: configuration.port });
     socket.broadcast = function broadcast(data, originator) {
@@ -115,14 +116,6 @@ var restartServer = function () {
     stopServer();
     startServer();
 }
-
-app.use('/debug', (req, res, next) => {
-    if (configuration.debug) {
-        res.sendFile(path.join(__dirname, 'producer', req.url));
-    } else {
-        next();
-    }
-});
 
 if (configuration.debug) {
     restartServer();
