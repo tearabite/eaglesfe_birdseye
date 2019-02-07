@@ -107,10 +107,13 @@ var startServer = function () {
         ws.onmessage = function (message) {
             socket.broadcast(message.data, ws);
             console.log(message.data);
+            ws.send("ok " + msgCount++);
         };
         console.log('CLIENT CONNECTED');
     });
 }
+
+var msgCount = 0;
 
 var restartServer = function () {
     stopServer();

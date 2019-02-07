@@ -66,8 +66,8 @@ class RobotPlaceholder {
     }
 
     update (telemetry) {
-        const position = telemetry.position;
-        if (position) {
+        let position = telemetry.position;
+        if (telemetry.position) {
             this.object.position.set(position.x, position.y, position.z);
             const pitch = THREE.Math.degToRad(position.pitch * -1);
             const roll = THREE.Math.degToRad(position.roll * -1);
