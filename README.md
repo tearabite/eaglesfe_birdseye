@@ -1,4 +1,4 @@
-# **Introduction**
+# Introduction
 
 Birdseye Viewer is a utility targeted to participants in the FIRST Tech Challenge robotics competition. Its aim to to ease some of the inefficiencies and tediousness that arises while developing the robot - particularly the autonomous programs.
 
@@ -6,11 +6,11 @@ The foremost function of Birdseye Viewer is to provide the user with a 3D render
 
 ![](doc/overview.gif)
 
-# **JSON Data Reference**
+# JSON Data Reference
 
 Below is a quick reference for the JSON data the Birdseye Viewer consumes. For basic functionality, only keys *x* and *y* are strictly necessary. These represent the position of the robot on the field. Optionally, *z* can also be provided to raise the robot off the field. *Pitch, Roll*, and *Heading* are also correctly reflected in the rendering. However, none of these inputs are required.
 
-## *Robot Position*
+## Robot Position
 
 The robots position as rendered in BirdseyeViewer is determined by an object with the `robot` in the telemetry payload. The object may contain all or some of the fields described below. 
 
@@ -26,6 +26,7 @@ The robots position as rendered in BirdseyeViewer is determined by an object wit
 _Example_
 
 Render the robot on the field at `[34.2, 55.1, 0.5]` with a pitch and roll of `0` degrees and a heading of `153` degrees.
+
 ```json
 {
     robot: {
@@ -39,7 +40,7 @@ Render the robot on the field at `[34.2, 55.1, 0.5]` with a pitch and roll of `0
 }
 ```
 
-## *Target Indicators*
+## Target Indicators
 
 Target indicators are a useful feature for debugging on-bot logic that computes a target point. The top-level key `targets` in the telemetry payload should be an array of objects. Each object should consist of the fields described below. A visible target pin, much like a pin in Google Maps, will be drawn at the coordinates described in each element of the array.
 
@@ -54,6 +55,7 @@ Target indicators are a useful feature for debugging on-bot logic that computes 
 _Example_
 
 Draw three target indicators. One at `[40, 60, 0]` relative to the robot, another at `[40, 60, 0]` relative to the field, and a third and final one at `[-40, -10, 5]` relative to the field and rendered in red.
+
 ```json
 {
     targets: [
@@ -64,8 +66,7 @@ Draw three target indicators. One at `[40, 60, 0]` relative to the robot, anothe
 }
 ```
 
-
-# **Extensibility**
+# Extensibility
 One of the great things about the structure of Birdseye is that really, you can send to it any data you wish. If you would like to transmit more verbose diagnostic detail, you can throw it all into the data you send to Birdseye Viewer. Further, because Birdseye is open-source, it can be extended to actually respond to that data however you like using JavaScript. Unrecognized keys will simply be displayed on screen in a cleanly formatted JSON view.
 
 ![](doc/rightRail.png)
