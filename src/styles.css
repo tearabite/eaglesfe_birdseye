@@ -1,0 +1,8 @@
+@import '~codemirror/lib/codemirror.css';
+@import '~codemirror/theme/material.css';
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+body {
+    margin: 0px;
+    overflow: hidden !important;
+}

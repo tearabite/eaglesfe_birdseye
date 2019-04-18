@@ -1,0 +1,20 @@
+<div class="menu">
+    <mat-accordion [multi]="true">
+        <mat-expansion-panel expanded="true">
+             <mat-expansion-panel-header>
+               <mat-panel-title>
+                 Telemetry
+               </mat-panel-title>
+             </mat-expansion-panel-header>
+             <app-telemetry [maxBufferLength]="40"></app-telemetry>
+           </mat-expansion-panel>
+           <mat-expansion-panel expanded="true">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  Debugger
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <app-debugger></app-debugger>
+            </mat-expansion-panel>
+     </mat-accordion>
+</div>

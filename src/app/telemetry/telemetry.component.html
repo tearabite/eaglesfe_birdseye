@@ -1,0 +1,12 @@
+<div style="margin: auto; width: fit-content;">
+    <mat-button-toggle-group>
+    <mat-button-toggle value="raw" checked="true">
+      <mat-icon>code</mat-icon>
+    </mat-button-toggle>
+    <mat-button-toggle value="pretty">
+      <mat-icon>dns</mat-icon>
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+</div>
+<ngx-codemirror #raw [ngModel]="currentFrame | json" [options]="{ mode: { name: 'javascript', json: true } }"></ngx-codemirror>
+<mat-progress-bar mode="determinate" [value]="bufferedTime"></mat-progress-bar>
