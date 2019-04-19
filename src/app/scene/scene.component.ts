@@ -1,22 +1,39 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, Input } from '@angular/core';
 import * as THREE from 'three'
-import { ThreeHelpers } from './scene.helpers'
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import { ModelProviderService, ThreeHelpers } from '../modelprovider.service';
+import { Object3D } from 'three';
 
 @Component({
   selector: 'app-scene',
   templateUrl: './scene.component.html',
-  styleUrls: ['./scene.component.css']
+  styleUrls: ['./scene.component.css'],
+  providers: [ ModelProviderService ]
 })
 export class SceneComponent implements AfterViewInit {
+  @Input() lightColor: string | number | THREE.Color = '#444444';
+
   @ViewChild('canvas') canvasRef: ElementRef
   private renderer: THREE.WebGLRenderer;
   private camera: THREE.PerspectiveCamera;
   private scene: THREE.Scene;
   private controls: OrbitControls;
 
-  constructor() { }
+  constructor(private modelProvider: ModelProviderService) {
+    modelProvider.loading.subscribe((progress: ProgressEvent) => {
+      console.log(`Loading Models: ${(progress.loaded/progress.total * 100).toFixed(2)}%`);
+    });
+
+    modelProvider.loaded.subscribe((model: Object3D) => {
+      this.processModel(model);
+      this.scene.add(model);
+    });
+
+    modelProvider.loadError.subscribe((error: ErrorEvent) => {
+
+    });
+  }
 
   ngAfterViewInit(): void {
     this.initializeRenderer();
@@ -58,9 +75,9 @@ export class SceneComponent implements AfterViewInit {
 
   initializeScene() {
     this.scene = new THREE.Scene();
-    let light = new THREE.DirectionalLight("#444444", 1);
-    let ambient = new THREE.AmbientLight("#444444");
-    let spotlight = new THREE.SpotLight("#444444");
+    let light = new THREE.DirectionalLight(this.lightColor, 1);
+    let ambient = new THREE.AmbientLight(this.lightColor);
+    let spotlight = new THREE.SpotLight(this.lightColor);
 
     spotlight.position.set(0, 0, 80);
     spotlight.castShadow = true;
@@ -68,12 +85,11 @@ export class SceneComponent implements AfterViewInit {
     spotlight.intensity = 1.5;
     light.position.set(0, -70, 100).normalize();
 
-    // Add lights
     this.scene.add(light);
     this.scene.add(ambient);
     this.scene.add(spotlight);
 
-    ThreeHelpers.addModelToScene(this, ThreeHelpers.models_FieldPath);
+    this.modelProvider.requestModel(ModelProviderService.Models.ftc.field)
   }
 
   initializeControls() {
@@ -100,5 +116,15 @@ export class SceneComponent implements AfterViewInit {
   }
   private get canvas(): HTMLCanvasElement {
     return this.canvasRef.nativeElement;
+  }
+
+  processModel(model: Object3D) {
+    model.traverse(child => {
+      child.castShadow = true;
+      child.receiveShadow = true;
+    });
+    model.rotateX(THREE.Math.degToRad(90));
+    model.rotateY(THREE.Math.degToRad(-90));
+    model.up = ThreeHelpers.zAxis;
   }
 }

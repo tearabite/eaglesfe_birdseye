@@ -14,14 +14,14 @@ Below is a quick reference for the JSON data the Birdseye Viewer consumes. For b
 
 The robots position as rendered in BirdseyeViewer is determined by an object with the `robot` in the telemetry payload. The object may contain all or some of the fields described below. 
 
-|Key|Type|Range|Description|
-|---|---|---|---|
-|x|number|-144,144|The X position of the robot relative to the field's coordinate plane.
-|y|number|-144,144|The Y position of the robot relative to the field's coordinate plane.
-|z|number|0,Infinity|The Z position of the robot relative to the field's coordinate plane.
-|pitch|number|-180,180|The rotation of the robot around the X axis of its own coordinate plane.
-|roll|number|-180,180|The rotation of the robot around the Y axis of its own coordinate plane.
-|heading|number|-180,180|The rotation of the robot around the Z axis relative to the field's coordinate plane. 
+| Key     | Type    | Range      | Description                                                                           |
+|---------|---------|------------|---------------------------------------------------------------------------------------|
+| x       | number  | -144,144   | The X position of the robot relative to the field's coordinate plane.                 |
+| y       | number. | -144,144.  | The Y position of the robot relative to the field's coordinate plane.                 |
+| z       | number  | 0,Infinity | The Z position of the robot relative to the field's coordinate plane.                 |
+| pitch   | number  | -180,180   | The rotation of the robot around the X axis of its own coordinate plane.              |
+| roll    | number  | -180,180   | The rotation of the robot around the Y axis of its own coordinate plane.              |
+| heading | number  | -180,180   | The rotation of the robot around the Z axis relative to the field's coordinate plane. |
 
 _Example_
 
