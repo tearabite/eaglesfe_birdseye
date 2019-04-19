@@ -2,6 +2,7 @@ import { Injectable, Input } from '@angular/core';
 import {TelemetryService, Telemetry} from './telemetry.service';
 import { Observable, interval, Subscription, timer, of} from 'rxjs';
 import { switchMap, tap, map, repeat, take } from 'rxjs/operators';
+import { GameProviderService as GameProviderService } from './gameprovider.service';
 
 @Injectable({
   providedIn: 'root'

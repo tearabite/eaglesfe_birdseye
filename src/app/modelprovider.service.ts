@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { GLTFLoader, GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as THREE from 'three'
 import { Subject } from 'rxjs';
+import { GameProviderService, Game } from './gameprovider.service';
 
 class Models {
   public static readonly basePath: string = 'assets\\models';
 
   public static readonly ftc = {
-    field: `${Models.basePath}\\ftc_field.glb`
+    field: 'ftc_field.glb'
   }
 }
 
@@ -18,15 +19,36 @@ export class ModelProviderService {
   loading: Subject<ProgressEvent> = new Subject<ProgressEvent>();
   loaded: Subject<THREE.Object3D> = new Subject<THREE.Object3D>();
   loadError: Subject<ErrorEvent> = new Subject<ErrorEvent>();
+  removed: Subject<string> = new Subject<string>();
 
-  constructor() {
+  private loadedGame: Game;
+  private loadedModelPathIdentifierMap: Map<string, string> = new Map<string, string>();
 
+  constructor(private gameProvider: GameProviderService) {
+    gameProvider.selectedGame.subscribe((game: Game) => {
+      if (this.loadedGame != undefined) {
+        this.loadedGame.models.forEach(path => {
+
+          const uuid = this.loadedModelPathIdentifierMap.get(path);
+          this.removed.next(uuid);
+          this.loadedModelPathIdentifierMap.delete(path);
+        });
+      }
+
+      this.loadedGame = game;
+      game.models.forEach(path => {
+        this.loadModel(path);
+      });
+    });
   }
 
-  requestModel(modelPath: string) {
+  loadModel(modelPath: string) {
     const loader = new GLTFLoader();
-    loader.load(modelPath,
-      (model: GLTF) => this.loaded.next(model.scene),
+    loader.load(`${Models.basePath}\\${modelPath}`,
+      (model: GLTF) => {
+        this.loaded.next(model.scene)
+        this.loadedModelPathIdentifierMap.set(modelPath, model.scene.uuid);
+      },
       (progress: ProgressEvent) => this.loading.next(progress),
       (error: ErrorEvent) => this.loadError.next(error));
   }

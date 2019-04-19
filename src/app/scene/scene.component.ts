@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef, Input } from '@angular/core';
 import * as THREE from 'three'
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
@@ -32,6 +32,11 @@ export class SceneComponent implements AfterViewInit {
 
     modelProvider.loadError.subscribe((error: ErrorEvent) => {
 
+    });
+
+    modelProvider.removed.subscribe(uuid => {
+      const child = this.scene.children.filter(c => c.uuid === uuid)[0];
+      this.scene.remove(child);
     });
   }
 
@@ -89,7 +94,7 @@ export class SceneComponent implements AfterViewInit {
     this.scene.add(ambient);
     this.scene.add(spotlight);
 
-    this.modelProvider.requestModel(ModelProviderService.Models.ftc.field)
+    this.modelProvider.loadModel(ModelProviderService.Models.ftc.field)
   }
 
   initializeControls() {

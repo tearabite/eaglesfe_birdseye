@@ -1,0 +1,5 @@
+<mat-radio-group #picker name="games" (change)="onSelectedGameChanged($event)">
+  <mat-radio-button *ngFor="let game of games" [value]="game">
+    <p>{{game.name}}</p>
+  </mat-radio-button>
+</mat-radio-group>

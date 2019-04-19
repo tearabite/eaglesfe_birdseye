@@ -3,6 +3,7 @@ import { DebugService } from '../debug.service';
 import { MatSlider } from '@angular/material/slider';
 import { WebsocketService } from '../websocket.service';
 import { TelemetryService } from '../telemetry.service';
+import { GameProviderService, Game } from '../gameprovider.service';
 
 @Component({
   selector: 'app-debugger',
@@ -10,10 +11,11 @@ import { TelemetryService } from '../telemetry.service';
   styleUrls: ['./debugger.component.css'],
 })
 export class DebuggerComponent implements OnInit {
-
   interval: number = 100;
 
-  constructor(private debugService: DebugService) { }
+  constructor(private debugService: DebugService) {
+
+  }
 
   ngOnInit() { }
 
@@ -24,4 +26,6 @@ export class DebuggerComponent implements OnInit {
       this.debugService.stopSimulating();
     }
   }
+
+
 }

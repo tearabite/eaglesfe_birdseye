@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { TelemetryComponent } from './telemetry/telemetry.component';
 import { MenuComponent } from './menu/menu.component';
 import { DebuggerComponent } from './debugger/debugger.component';
+import { SceneComponent } from './scene/scene.component';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -20,10 +21,14 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatListModule } from '@angular/material/list';
+import { MatRadioModule } from '@angular/material/radio';
+
+import { HttpClientModule } from '@angular/common/http';
 
 import 'codemirror/mode/javascript/javascript';
 import 'hammerjs';
-import { SceneComponent } from './scene/scene.component';
+import { GamePickerComponent } from './game-picker/game-picker.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +37,7 @@ import { SceneComponent } from './scene/scene.component';
     MenuComponent,
     DebuggerComponent,
     SceneComponent,
+    GamePickerComponent,
   ],
   imports: [
     FormsModule,
@@ -46,7 +52,10 @@ import { SceneComponent } from './scene/scene.component';
     MatIconModule,
     MatSliderModule,
     MatCardModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatListModule,
+    MatRadioModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
