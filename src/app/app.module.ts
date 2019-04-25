@@ -23,6 +23,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatListModule } from '@angular/material/list';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
 
 import { HttpClientModule } from '@angular/common/http';
 
@@ -55,7 +56,8 @@ import { GamePickerComponent } from './game-picker/game-picker.component';
     MatCheckboxModule,
     MatListModule,
     MatRadioModule,
-    HttpClientModule
+    HttpClientModule,
+    MatSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent]
