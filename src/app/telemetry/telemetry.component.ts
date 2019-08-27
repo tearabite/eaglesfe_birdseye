@@ -23,13 +23,13 @@ export class TelemetryComponent implements OnInit {
 
 
   constructor(telemetryService: TelemetryService) {
-    telemetryService.messages.subscribe(msg => {
-      if (this.buffer.length >= this.maxBufferLength) {
-        this.buffer.shift();
-      }
-      this.buffer.push(msg);
-      this.bufferedTime = (this.buffer.length / this.maxBufferLength) * 100;
-    });
+    // telemetryService.messages.subscribe(msg => {
+    //   if (this.buffer.length >= this.maxBufferLength) {
+    //     this.buffer.shift();
+    //   }
+    //   this.buffer.push(msg);
+    //   this.bufferedTime = (this.buffer.length / this.maxBufferLength) * 100;
+    // });
 
     interval(100)
       .pipe(switchMap(i => {

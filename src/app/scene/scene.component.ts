@@ -9,10 +9,11 @@ import { Object3D } from 'three';
   selector: 'app-scene',
   templateUrl: './scene.component.html',
   styleUrls: ['./scene.component.css'],
-  providers: [ ModelProviderService ]
 })
 export class SceneComponent implements AfterViewInit {
   @Input() lightColor: string | number | THREE.Color = '#444444';
+  @Input() shadowsEnabled: boolean = true;
+  @Input() antialiasEnabled: boolean = true;
 
   @ViewChild('canvas') canvasRef: ElementRef
   private renderer: THREE.WebGLRenderer;
@@ -58,12 +59,14 @@ export class SceneComponent implements AfterViewInit {
   }
 
   initializeRenderer() {
-    this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true });
+    this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: this.antialiasEnabled });
     this.renderer.setPixelRatio(devicePixelRatio);
     this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
     this.renderer.gammaOutput = true;
-    this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    if (this.shadowsEnabled) {
+      this.renderer.shadowMap.enabled = true;
+      this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    }
   }
 
   initializeCamera() {

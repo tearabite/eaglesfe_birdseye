@@ -29,6 +29,7 @@ import { HttpClientModule } from '@angular/common/http';
 import 'codemirror/mode/javascript/javascript';
 import 'hammerjs';
 import { GamePickerComponent } from './game-picker/game-picker.component';
+import { RobotComponent } from './robot/robot.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { GamePickerComponent } from './game-picker/game-picker.component';
     DebuggerComponent,
     SceneComponent,
     GamePickerComponent,
+    RobotComponent,
   ],
   imports: [
     FormsModule,

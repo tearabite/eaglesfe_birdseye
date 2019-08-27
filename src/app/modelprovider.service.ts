@@ -8,7 +8,8 @@ class Models {
   public static readonly basePath: string = 'assets\\models';
 
   public static readonly ftc = {
-    field: 'ftc_field.glb'
+    field: 'ftc_field.glb',
+    curiosity_rover:'curiosity_rover.glb'
   }
 }
 
