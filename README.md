@@ -47,7 +47,7 @@ _Example_
 
 | Name  | Type     |
 | ----- | -------- |
-| robot | `object` |
+| position | `object` |
 
 The robots position as rendered in BirdseyeViewer is determined by an object with the `robot` in the telemetry payload. The object may contain all or some of the fields described below.
 
