@@ -15,4 +15,7 @@ export class MenuComponent implements OnInit {
   ngOnInit() {
   }
 
+  onDrag(event) {
+    event.stopPropagation();
+  }
 }
