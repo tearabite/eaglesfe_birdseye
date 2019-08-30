@@ -98,6 +98,7 @@ export class SceneComponent implements AfterViewInit {
     this.scene.add(spotlight);
 
     this.modelProvider.loadModel(ModelProviderService.Models.ftc.field)
+    this.modelProvider.buildRobot();
   }
 
   initializeControls() {

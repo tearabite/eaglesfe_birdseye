@@ -10,12 +10,49 @@ The foremost function of Birdseye Viewer is to provide the user with a 3D render
 
 Below is a quick reference for the JSON data the Birdseye Viewer consumes. For basic functionality, only keys *x* and *y* are strictly necessary. These represent the position of the robot on the field. Optionally, *z* can also be provided to raise the robot off the field. *Pitch, Roll*, and *Heading* are also correctly reflected in the rendering. However, none of these inputs are required.
 
-## Robot Position
+`birdseye`
+==
 
-The robots position as rendered in BirdseyeViewer is determined by an object with the `robot` in the telemetry payload. The object may contain all or some of the fields described below. 
+| Name     | Type     |
+| -------- | -------- |
+| birdseye | `object` |
+
+The top level object for all data which birdseye-viewer accepts and handles natively.
+
+_Note: Arbitrary JSON data may safely be included as a child or as a sibling of this object._
+
+`robot`
+==
+
+| Name  | Type     |
+| ----- | -------- |
+| robot | `object` |
+
+The `birdseye.robot` object holds all information which should affect the manner in which the 3D model of the robot is rendered. This currently includes one child object which describes the position of the robot relative to the field and it's orientation in space.
+
+_Example_
+
+```json
+{
+    "birdseye": {
+        "robot": {
+            // robot information
+        }
+    }
+}
+```
+
+`position`
+==
+
+| Name  | Type     |
+| ----- | -------- |
+| position | `object` |
+
+The robots position as rendered in BirdseyeViewer is determined by an object with the `robot` in the telemetry payload. The object may contain all or some of the fields described below.
 
 | Key     | Type    | Range      | Description                                                                           |
-|---------|---------|------------|---------------------------------------------------------------------------------------|
+| ------- | ------- | ---------- | ------------------------------------------------------------------------------------- |
 | x       | number  | -144,144   | The X position of the robot relative to the field's coordinate plane.                 |
 | y       | number. | -144,144.  | The Y position of the robot relative to the field's coordinate plane.                 |
 | z       | number  | 0,Infinity | The Z position of the robot relative to the field's coordinate plane.                 |
@@ -29,28 +66,34 @@ Render the robot on the field at `[34.2, 55.1, 0.5]` with a pitch and roll of `0
 
 ```json
 {
-    robot: {
-        x: 34.2,
-        y: 55.1,
-        z: 0.5
-        pitch: 0,
-        roll: 0,
-        heading: 153
+    "robot": {
+        "position": {
+            "x": 34.2,
+            "y": 55.1,
+            "z": 0.5,
+            "pitch": 0,
+            "roll": 0,
+            "heading": 153
+        }
     }
 }
 ```
 
-## Target Indicators
+`pins`
+==
 
-Target indicators are a useful feature for debugging on-bot logic that computes a target point. The top-level key `targets` in the telemetry payload should be an array of objects. Each object should consist of the fields described below. A visible target pin, much like a pin in Google Maps, will be drawn at the coordinates described in each element of the array.
+| Name | Type    |
+| ---- | ------- |
+| pins | `array` |
 
-|Key|Type|Range|Description|
-|---|---|---|---|
-|relativeTo|string|'robot', 'field'|The object (either the robot or the field) relative to which the target indicator should be plotted. If omitted, the indicator will be drawn in the field's coordinate plane. 
-|x|number|-144,144|The X position of the target indicator.
-|y|number|-144,144|The Y position of the target indicator.
-|z|number|0,Infinity|The Z position of the target indicator.
-|color|[hex triplet](https://en.wikipedia.org/wiki/Web_colors#Hex_triplet)| |The optional color to use to help identify this target indicator.
+Pins are a useful feature for debugging on-bot logic that computes a target point. The key `pins` in the `birdseye` object is an array of objects. Each object should consist of the fields described below. A visible target pin, much like a pin in Google Maps, will be drawn at the coordinates described in each element of the array.
+
+| Key   | Type                                                                | Range      | Description                                                       |
+| ----- | ------------------------------------------------------------------- | ---------- | ----------------------------------------------------------------- |
+| x     | number                                                              | -144,144   | The X position of the target indicator.                           |
+| y     | number                                                              | -144,144   | The Y position of the target indicator.                           |
+| z     | number                                                              | 0,Infinity | The Z position of the target indicator.                           |
+| color | [hex triplet](https://en.wikipedia.org/wiki/Web_colors#Hex_triplet) |            | The optional color to use to help identify this target indicator. |
 
 _Example_
 
@@ -58,10 +101,9 @@ Draw three target indicators. One at `[40, 60, 0]` relative to the robot, anothe
 
 ```json
 {
-    targets: [
-        { relativeTo: "robot", x: 40, y: 60 },
-        { x: 40, y: 60, z: 0 },
-        { x: -40, y: -10, z: 5, color: "#FF0000" },
+    "targets": [
+        { "x": 40, "y": 60 },
+        { "x": -40, "y": -10, "z": 5, "color": "#FF0000" },
     ]
 }
 ```
