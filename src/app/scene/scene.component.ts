@@ -19,7 +19,7 @@ export class SceneComponent implements AfterViewInit {
 
   @ViewChild('canvas') canvasRef: ElementRef
   @ViewChild(RobotComponent) robot: RobotComponent;
-  
+
   private renderer: THREE.WebGLRenderer;
   private camera: THREE.PerspectiveCamera;
   private scene: THREE.Scene;
@@ -38,10 +38,13 @@ export class SceneComponent implements AfterViewInit {
         })
       }
 
+      this.gameModelIds = [];
+
       // Load the new models.
       const models = await gameProvider.getAssetsForGame(game);
       models.forEach(model => {
         this.scene.add(model);
+        this.gameModelIds.push(model.id);
       });
     });
   }
@@ -51,7 +54,7 @@ export class SceneComponent implements AfterViewInit {
     this.initializeCamera();
     await this.initializeScene();
     this.initializeControls();
-    
+
     this.robot.model.subscribe((model) => {
       this.scene.add(model);
     });

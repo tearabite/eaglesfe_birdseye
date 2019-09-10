@@ -26,17 +26,18 @@ export class Telemetry {
 })
 export class TelemetryService {
   public messages: Subject<Telemetry>;
+  public currentFrame: Telemetry;
 
   constructor(wsService: WebsocketService) {
     this.messages = <Subject<Telemetry>>wsService.connect(DEBUG_URL).pipe(map(
       (response: MessageEvent): Telemetry => {
-        let data;
+        let data: Telemetry;
         try {
           data = JSON.parse(response.data);
         } catch {
           console.error("Invalid telemetry recieved!")
         }
-
+        this.currentFrame = data;
         return Object.assign(new Telemetry(), data);;
       }
     ));

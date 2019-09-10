@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { TelemetryService } from '../telemetry.service';
 import { Object3D } from 'three';
-import { Subject } from 'rxjs';
+import { Subject, timer } from 'rxjs';
 import { ThreeHelpers } from '../util/threehelpers';
 import * as THREE from 'three';
 
@@ -13,28 +13,37 @@ import * as THREE from 'three';
 export class RobotComponent implements OnInit {
   private proxiedObject: Object3D;
   public model = new Subject<Object3D>();
-  constructor(telemetryService: TelemetryService) {
-    const that = this;
+  constructor(private telemetryService: TelemetryService) {
 
-    telemetryService.messages.subscribe(msg => {
-      let robot = msg.robot;
-      if (!robot){
-        return;
-      }
-
-      const x = (msg.robot.x || that.proxiedObject.position.x || 0) as number;
-      const y = (msg.robot.y || that.proxiedObject.position.y || 0) as number;
-      const z = (msg.robot.z || that.proxiedObject.position.z || 0) as number;
-
-      that.proxiedObject.position.setX(x);
-      that.proxiedObject.position.setY(y);
-      that.proxiedObject.position.setZ(z);
-    });
-
-    this.initializeRobotModel();
   }
 
   ngOnInit() {
+    this.initializeRobotModel();
+
+    let t = timer(0,100);
+    t.subscribe(t => {
+      this.update();
+    });
+  }
+
+  private update() {
+    let that = this;
+    if (!that.telemetryService.currentFrame) {
+      return;
+    }
+
+    let robot = that.telemetryService.currentFrame.robot;
+    if (!robot){
+      return;
+    }
+
+    const x = (robot.x || that.proxiedObject.position.x || 0) as number;
+    const y = (robot.y || that.proxiedObject.position.y || 0) as number;
+    const z = (robot.z || that.proxiedObject.position.z || 0) as number;
+
+    that.proxiedObject.position.setX(x);
+    that.proxiedObject.position.setY(y);
+    that.proxiedObject.position.setZ(z);
 
   }
 

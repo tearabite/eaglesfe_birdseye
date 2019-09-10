@@ -2,18 +2,21 @@
     {
         "name": "Relic Recovery",
         "season": 2017,
-        "models": [ "birdseye_viewer_relic_recovery/non_existent_model.glb"]
+        "models": [
+            {
+                "path": "birdseye_viewer_relic_recovery/non_existent_model.glb"
+            }
+    ]
     },
     {
         "name": "Rover Ruckus",
         "season": 2018,
-        "models": [ 
-            { 
+        "models": [
+            {
                 "path": "birdseye_viewer_rover_ruckus/static_1819_rover_ruckus.glb",
                 "rotation": [ 90, 0, 0],
                 "translation": [ 0, 0, 0 ]
             }
         ]
-
     }
 ]
