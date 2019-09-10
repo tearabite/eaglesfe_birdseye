@@ -64,7 +64,7 @@ _Example_
 
 Render the robot on the field at `[34.2, 55.1, 0.5]` with a pitch and roll of `0` degrees and a heading of `153` degrees.
 
-```json
+```js
 {
     "robot": {
         "position": {

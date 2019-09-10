@@ -2,8 +2,10 @@ import { Component, AfterViewInit, ViewChild, ElementRef, Input } from '@angular
 import * as THREE from 'three'
 import { GLTF } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import { ModelProviderService, ThreeHelpers } from '../modelprovider.service';
 import { Object3D } from 'three';
+import { GameProviderService, Game } from '../gameprovider.service';
+import { ThreeHelpers } from '../util/threehelpers';
+import { RobotComponent } from '../robot/robot.component';
 
 @Component({
   selector: 'app-scene',
@@ -16,36 +18,43 @@ export class SceneComponent implements AfterViewInit {
   @Input() antialiasEnabled: boolean = true;
 
   @ViewChild('canvas') canvasRef: ElementRef
+  @ViewChild(RobotComponent) robot: RobotComponent;
+  
   private renderer: THREE.WebGLRenderer;
   private camera: THREE.PerspectiveCamera;
   private scene: THREE.Scene;
   private controls: OrbitControls;
+  private gameModelIds: Array<number>;
+  private robotModelId: number;
+  private fieldRotationVector = new THREE.Vector3(THREE.Math.degToRad(90), THREE.Math.degToRad(-90), 0);
 
-  constructor(private modelProvider: ModelProviderService) {
-    modelProvider.loading.subscribe((progress: ProgressEvent) => {
-      console.log(`Loading Models: ${(progress.loaded/progress.total * 100).toFixed(2)}%`);
-    });
+  constructor(private gameProvider: GameProviderService) {
+    gameProvider.current.subscribe(async (game: Game) => {
+      // If we already have game models, remove each of them from the scene first.
+      if (this.gameModelIds) {
+        this.gameModelIds.forEach(id => {
+          const model = this.scene.getObjectById(id);
+          this.scene.remove(model);
+        })
+      }
 
-    modelProvider.loaded.subscribe((model: Object3D) => {
-      this.processModel(model);
-      this.scene.add(model);
-    });
-
-    modelProvider.loadError.subscribe((error: ErrorEvent) => {
-
-    });
-
-    modelProvider.removed.subscribe(uuid => {
-      const child = this.scene.children.filter(c => c.uuid === uuid)[0];
-      this.scene.remove(child);
+      // Load the new models.
+      const models = await gameProvider.getAssetsForGame(game);
+      models.forEach(model => {
+        this.scene.add(model);
+      });
     });
   }
 
-  ngAfterViewInit(): void {
+  async ngAfterViewInit() {
     this.initializeRenderer();
     this.initializeCamera();
-    this.initializeScene();
+    await this.initializeScene();
     this.initializeControls();
+    
+    this.robot.model.subscribe((model) => {
+      this.scene.add(model);
+    });
 
     this.startRenderingLoop();
   }
@@ -81,7 +90,7 @@ export class SceneComponent implements AfterViewInit {
     this.camera.position.set(0, 0, 135);
   }
 
-  initializeScene() {
+  async initializeScene() {
     this.scene = new THREE.Scene();
     let light = new THREE.DirectionalLight(this.lightColor, 1);
     let ambient = new THREE.AmbientLight(this.lightColor);
@@ -97,8 +106,7 @@ export class SceneComponent implements AfterViewInit {
     this.scene.add(ambient);
     this.scene.add(spotlight);
 
-    this.modelProvider.loadModel(ModelProviderService.Models.ftc.field)
-    this.modelProvider.buildRobot();
+    this.addFieldModel();
   }
 
   initializeControls() {
@@ -116,10 +124,6 @@ export class SceneComponent implements AfterViewInit {
     this.renderer.setSize(window.innerWidth, window.innerHeight);
   }
 
-  public addModel(model: GLTF) {
-    this.scene.add(model.scene);
-  }
-
   private get aspectRatio(): number {
     return this.canvas.clientHeight / this.canvas.clientHeight;
   }
@@ -127,13 +131,15 @@ export class SceneComponent implements AfterViewInit {
     return this.canvasRef.nativeElement;
   }
 
-  processModel(model: Object3D) {
-    model.traverse(child => {
+  private async addFieldModel() {
+    const field = await ThreeHelpers.loadModel(ThreeHelpers.Models.ftc.field)
+
+    field.traverse(child => {
       child.castShadow = true;
       child.receiveShadow = true;
     });
-    model.rotateX(THREE.Math.degToRad(90));
-    model.rotateY(THREE.Math.degToRad(-90));
-    model.up = ThreeHelpers.zAxis;
+    field.rotation.setFromVector3(this.fieldRotationVector);
+    field.up = ThreeHelpers.zAxis;
+    this.scene.add(field);
   }
 }

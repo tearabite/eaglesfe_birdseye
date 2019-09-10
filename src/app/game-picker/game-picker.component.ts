@@ -11,13 +11,13 @@ export class GamePickerComponent implements OnInit {
   private games: Array<Game>;
 
   constructor(private gameProvider: GameProviderService) {
-    gameProvider.getGames().subscribe((games: Array<Game>) => this.games = games);
+    gameProvider.getGamesList().subscribe((games: Array<Game>) => this.games = games);
   }
 
   ngOnInit() {
   }
 
   onSelectedGameChanged({ value }) {
-    this.gameProvider.selectGame(value);
+    this.gameProvider.game = value;
   }
 }

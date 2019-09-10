@@ -2,17 +2,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "node",
+            "name": "ng serve",
+            "type": "chrome",
             "request": "launch",
-            "name": "Host (Debug)",
-            "program": "${workspaceFolder}/server.js",
-            "args": [ "--debug" ]
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Host",
-            "program": "${workspaceFolder}/server.js",
+            "preLaunchTask": "npm: start",
+            "url": "http://localhost:4200/#",
+            "webRoot": "${workspaceFolder}",
+            "sourceMapPathOverrides": {
+              "webpack:/*": "${webRoot}/*",
+              "/./*": "${webRoot}/*",
+              "/src/*": "${webRoot}/*",
+              "/*": "*",
+              "/./~/*": "${webRoot}/node_modules/*"
+            }
         }
     ]
 }

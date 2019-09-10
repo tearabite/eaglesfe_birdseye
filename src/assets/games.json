@@ -7,6 +7,13 @@
     {
         "name": "Rover Ruckus",
         "season": 2018,
-        "models": [ "birdseye_viewer_rover_ruckus/static_1819_rover_ruckus.glb"]
+        "models": [ 
+            { 
+                "path": "birdseye_viewer_rover_ruckus/static_1819_rover_ruckus.glb",
+                "rotation": [ 90, 0, 0],
+                "translation": [ 0, 0, 0 ]
+            }
+        ]
+
     }
 ]

@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { TelemetryService, Telemetry } from '../telemetry.service'
-import { WebsocketService } from '../websocket.service';
 import { CodemirrorComponent } from '@ctrl/ngx-codemirror'
 import { DebugService } from '../debug.service';
 import { Observable, interval, Subject } from 'rxjs'
