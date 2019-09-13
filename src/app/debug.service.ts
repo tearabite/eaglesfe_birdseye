@@ -16,7 +16,7 @@ export class DebugService {
 
   startSimulating() {
     this.sub = this.broadcast$.subscribe(t => {
-      this.telemetryService.messages.next(DebugService.generateRandomTelemetry());
+      this.telemetryService.send(DebugService.generateRandomTelemetry());
     });
   }
 
@@ -40,9 +40,9 @@ export class DebugService {
       robot: {
         x: Math.floor(Math.random() * 144 + 1) - 72,
         y: Math.floor(Math.random() * 144 + 1) - 72,
-        z: Math.floor(Math.random() * 144 + 1) - 72,
-        pitch: Math.floor(Math.random() * 360 + 1) - 180,
-        roll: Math.floor(Math.random() * 360 + 1) - 180,
+        //z: Math.floor(Math.random() * 144 + 1) - 72,
+        //pitch: Math.floor(Math.random() * 360 + 1) - 180,
+        //roll: Math.floor(Math.random() * 360 + 1) - 180,
         heading: Math.floor(Math.random() * 360 + 1) - 180,
       }
     }

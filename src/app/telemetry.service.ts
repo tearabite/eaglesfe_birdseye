@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Subject } from "rxjs";
-import { WebsocketService } from "./websocket.service";
-import { map } from 'rxjs/operators';
+import { webSocket, WebSocketSubject } from "rxjs/webSocket";
 
 const DEBUG_URL = "ws://echo.websocket.org/";
 
@@ -20,27 +19,30 @@ export class Telemetry {
   targets?: { x: Number; y: Number; z?: Number; relativeTo?: "robot" | "field"; }[];
   other?: any;
 }
-
+ 
 @Injectable({
   providedIn: 'root'
 })
 export class TelemetryService {
-  public messages: Subject<Telemetry>;
+  private ws : WebSocketSubject<unknown>;
+  public messages: Subject<Telemetry> = new Subject<Telemetry>();
   public currentFrame: Telemetry;
 
-  constructor(wsService: WebsocketService) {
-    this.messages = <Subject<Telemetry>>wsService.connect(DEBUG_URL).pipe(map(
-      (response: MessageEvent): Telemetry => {
-        let data: Telemetry;
-        try {
-          data = JSON.parse(response.data);
-        } catch {
-          console.error("Invalid telemetry recieved!")
+  constructor() {
+    this.ws = webSocket(DEBUG_URL);
+    this.ws.subscribe(
+      msg => {
+        if (msg as Telemetry) {
+          this.messages.next(msg as Telemetry)
         }
-        this.currentFrame = data;
-        return Object.assign(new Telemetry(), data);;
-      }
-    ));
+      },
+      err => console.log(err),
+      () => console.log("complete")
+    );
+  }
+
+  public send (object: any) {
+    this.ws.next(object);
   }
 
   public static InvalidTelemetry: Telemetry = {
