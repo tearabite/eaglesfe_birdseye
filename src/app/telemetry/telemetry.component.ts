@@ -15,7 +15,6 @@ export class TelemetryComponent implements OnInit {
 
   constructor(private telemetryService: TelemetryService) {
     this.telemetryService.messages.subscribe(msg => this.currentFrame = msg );
-    this.telemetryService.messages.subscribe(m => console.log(m));
   }
 
   ngOnInit() { 
