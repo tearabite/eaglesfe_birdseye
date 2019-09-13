@@ -7,8 +7,7 @@ import * as THREE from 'three';
 
 @Component({
   selector: 'app-robot',
-  templateUrl: './robot.component.html',
-  styleUrls: ['./robot.component.css'],
+  template: ''
 })
 export class RobotComponent implements OnInit {
   private proxiedObject: Object3D;
