@@ -43,9 +43,9 @@ function generateTelemtry() {
     return {
         timestamp: new Date().getTime(),
         robot: {
-            x: x,
-            y: y,
-            heading: ideg
+            x: Number(x.toFixed(2)),
+            y: Number(y.toFixed(2)),
+            heading: Number(ideg.toFixed(2))
         }
     }
 }

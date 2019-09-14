@@ -12,8 +12,10 @@
       <mat-icon>pause</mat-icon>
     </button>
   </div>
-  <ngx-codemirror 
+  <div class="container">
+    <ngx-codemirror 
     #raw [ngModel]="currentFrame | json" 
     [options]="{ mode: { name: 'javascript', json: true } }">
   </ngx-codemirror>
+  </div>
 </mat-expansion-panel>
