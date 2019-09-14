@@ -13,12 +13,23 @@ socket.broadcast = function broadcast(data, originator) {
     });
 };
 socket.on('connection', function (ws, req) {
-    ws.onmessage = function (message) {
+    console.log('CLIENT CONNECTED');
+    ws.on('message', (message) => {
         socket.broadcast(message.data, ws);
         console.log(message.data);
         ws.send("ok " + msgCount++);
-    };
-    console.log('CLIENT CONNECTED');
+    });
+    ws.on('close', () => {
+        console.log('CLIENT DIS-CONNECTED');
+    });
+    ws.on('error', (error) => {
+        if (error.errno === 'ECONNRESET'){
+            console.log('CLIENT REFRESH DETECTED');
+        }
+        else {
+            console.error(error);
+        }
+    });
 });
 
 var i = 0;

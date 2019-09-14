@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 
 import { TelemetryComponent } from './telemetry/telemetry.component';
 import { MenuComponent } from './menu/menu.component';
-import { DebuggerComponent } from './debugger/debugger.component';
 import { SceneComponent } from './scene/scene.component';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -38,7 +37,6 @@ import { RobotComponent } from './robot/robot.component';
     AppComponent,
     TelemetryComponent,
     MenuComponent,
-    DebuggerComponent,
     SceneComponent,
     GamePickerComponent,
     RobotComponent,

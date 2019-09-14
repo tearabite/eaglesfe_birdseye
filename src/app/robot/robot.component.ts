@@ -7,13 +7,16 @@ import * as THREE from 'three';
 
 @Component({
   selector: 'app-robot',
-  template: ''
+  template: '',
 })
 export class RobotComponent implements OnInit {
   private proxiedObject: Object3D;
   public model = new Subject<Object3D>();
-  constructor(private telemetryService: TelemetryService) {
-    this.telemetryService.messages.subscribe(m => this.update(m));
+
+  constructor() {
+    TelemetryService.messages.subscribe(msg => this.update(msg), error => {
+      console.log(error);
+    });
   }
 
   ngOnInit() {
@@ -37,7 +40,7 @@ export class RobotComponent implements OnInit {
     that.proxiedObject.position.setX(x);
     that.proxiedObject.position.setY(y);
     that.proxiedObject.position.setZ(z);
-
+    
     that.proxiedObject.rotation.setFromVector3(new Vector3(
       THREE.Math.degToRad(roll),
       THREE.Math.degToRad(pitch),

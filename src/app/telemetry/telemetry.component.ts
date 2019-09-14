@@ -14,7 +14,16 @@ export class TelemetryComponent implements OnInit {
   private currentFrame: Telemetry;
 
   constructor(private telemetryService: TelemetryService) {
-    this.telemetryService.messages.subscribe(msg => this.currentFrame = msg );
+  }
+
+  private onConnectDisconnectClicked() {
+    if (this.telemetryService.isConnected) {
+      this.telemetryService.disconnect();
+    }
+    else {
+      this.telemetryService.connect('ws://localhost:8080');
+      TelemetryService.messages.subscribe(msg => this.currentFrame = msg );
+      console.log("Trying to connect...");}
   }
 
   ngOnInit() { 
