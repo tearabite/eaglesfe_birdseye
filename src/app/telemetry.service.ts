@@ -2,7 +2,8 @@ import { Injectable } from "@angular/core";
 import { Subject } from "rxjs";
 import { webSocket, WebSocketSubject } from "rxjs/webSocket";
 
-const DEBUG_URL = "ws://echo.websocket.org/";
+//const DEBUG_URL = "ws://echo.websocket.org/";
+const DEBUG_URL = "ws://localhost:8080";
 
 export class Telemetry {
   dt?: (other: Telemetry) => number;
@@ -25,10 +26,11 @@ export class Telemetry {
 })
 export class TelemetryService {
   private ws : WebSocketSubject<unknown>;
-  public messages: Subject<Telemetry> = new Subject<Telemetry>();
+  public messages: Subject<Telemetry>;
   public currentFrame: Telemetry;
 
   constructor() {
+    this.messages = new Subject<Telemetry>();
     this.ws = webSocket(DEBUG_URL);
     this.ws.subscribe(
       msg => {

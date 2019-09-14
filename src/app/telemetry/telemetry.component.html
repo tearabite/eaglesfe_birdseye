@@ -1,12 +1,19 @@
-<div style="margin: auto; width: fit-content;">
-    <mat-button-toggle-group>
-    <mat-button-toggle value="raw" checked="true">
-      <mat-icon>code</mat-icon>
-    </mat-button-toggle>
-    <mat-button-toggle value="pretty">
-      <mat-icon>dns</mat-icon>
-    </mat-button-toggle>
-  </mat-button-toggle-group>
-</div>
-<ngx-codemirror #raw [ngModel]="currentFrame | json" [options]="{ mode: { name: 'javascript', json: true } }"></ngx-codemirror>
-<mat-progress-bar mode="determinate" [value]="bufferedTime"></mat-progress-bar>
+<mat-expansion-panel expanded="true">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      Telemetry
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <div class="container">
+    <button mat-stroked-button>
+      <mat-icon>compare_arrows</mat-icon>
+    </button>
+    <button mat-stroked-button>
+      <mat-icon>pause</mat-icon>
+    </button>
+  </div>
+  <ngx-codemirror 
+  #raw [ngModel]="currentFrame | json" 
+  [options]="{ mode: { name: 'javascript', json: true } }">
+  </ngx-codemirror>
+</mat-expansion-panel>

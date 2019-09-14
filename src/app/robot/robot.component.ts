@@ -22,7 +22,7 @@ export class RobotComponent implements OnInit {
 
   private update(frame) {
     let that = this;
-    if (!frame || !frame.robot) {
+    if (!frame || !frame.robot || !that.proxiedObject) {
       return;
     }
     let robot = frame.robot;
@@ -33,7 +33,6 @@ export class RobotComponent implements OnInit {
     const pitch = (robot.pitch || that.proxiedObject.rotation.y || 0) as number;
     const roll = (robot.roll || that.proxiedObject.rotation.x || 0) as number;
     const heading = (robot.heading || that.proxiedObject.rotation.z || 0) as number;
-
 
     that.proxiedObject.position.setX(x);
     that.proxiedObject.position.setY(y);

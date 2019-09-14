@@ -1,9 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DebugService } from '../debug.service';
-import { MatSlider } from '@angular/material/slider';
-import { WebsocketService } from '../websocket.service';
-import { TelemetryService } from '../telemetry.service';
-import { GameProviderService, Game } from '../gameprovider.service';
 
 @Component({
   selector: 'app-debugger',
