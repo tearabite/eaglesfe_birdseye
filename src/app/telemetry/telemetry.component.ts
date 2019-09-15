@@ -50,6 +50,17 @@ export class TelemetryComponent implements OnInit {
   }
 
   public get isConnected() {
+    const isConnected = this.telemetryService.isConnected;
+    // I do not like what I am about to do (do work in a getter)
+    // but I do not yet know the proper way to do what I want.
+    if (isConnected) {
+      this.host.disable();
+      this.port.disable();
+    }
+    else {
+      this.host.enable();
+      this.port.enable();
+    }
     return this.telemetryService.isConnected;
   }
 
