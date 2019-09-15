@@ -10,7 +10,10 @@
 
 .container {
     width: unset;
-    padding: 5px;
+    padding-top: 5px;
+    padding-right: 10px;
+    padding-bottom: 0px;
+    padding-left: 10px;
     border-color: #e0e0e0;
     background: #f9f9f9;;
     border-style: solid;
@@ -25,4 +28,13 @@
 
 .disconnected {
     color: red;
+}
+
+.ipinput {
+    margin-left: 5px;
+    width: 50%;
+}
+
+.portinput {
+    width: 20%;
 }

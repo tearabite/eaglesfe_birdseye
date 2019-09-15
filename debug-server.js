@@ -4,7 +4,7 @@ var socket;
 
 console.log('Starting debug server.');
 
-socket = new WebSocketServer({ port: 8080 });
+socket = new WebSocketServer({ port: 3708 });
 socket.broadcast = function broadcast(data, originator) {
     socket.clients.forEach(function each(client) {
         if (client !== originator && client.readyState === 1) {

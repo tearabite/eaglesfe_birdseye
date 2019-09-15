@@ -7,12 +7,23 @@
   <div class="container">
     <button mat-stroked-button 
             (click)=onConnectDisconnectClicked() 
-            [ngClass]="{ connected: isConnected, disconnected: isConnected == false }">
+            [ngClass]="{ connected: isConnected, disconnected: isConnected == false }"
+            matTooltip="Connect or disconnect">
       <mat-icon>compare_arrows</mat-icon>
     </button>
-    <button mat-stroked-button>
-      <mat-icon>pause</mat-icon>
-    </button>
+    
+    <mat-form-field class="ipinput" [floatLabel]="never">
+      <input matInput placeholder="IP Address"
+             matTooltip="The IP address of the robot"
+             [formControl]="host" required>
+      <mat-error *ngIf="host.invalid">{{getErrorMessage(host)}}</mat-error>
+    </mat-form-field>
+    <mat-form-field class="portinput">
+      <input matInput placeholder="Port"
+             matTooltip="The port the server is using"
+             [formControl]="port" required>
+             <mat-error *ngIf="port.invalid">{{getErrorMessage(port)}}</mat-error>
+    </mat-form-field>
   </div>
   <div class="container">
     <ngx-codemirror #raw 
