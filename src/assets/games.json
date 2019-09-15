@@ -8,7 +8,7 @@
         "models": [
             {
                 "path": "birdseye_viewer_rover_ruckus/static_1819_rover_ruckus.glb",
-                "rotation": [ 90, 0, 0],
+                "rotation": [ 90, -90, 0],
                 "translation": [ 0, 0, 0 ]
             }
         ]
