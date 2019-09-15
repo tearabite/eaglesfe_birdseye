@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { TelemetryService, Telemetry } from '../telemetry.service'
 import { CodemirrorComponent } from '@ctrl/ngx-codemirror'
+import { timer } from 'rxjs';
 
 @Component({
   selector: 'app-telemetry',
@@ -11,8 +12,11 @@ export class TelemetryComponent implements OnInit {
   @ViewChild('raw') raw: CodemirrorComponent;
   @Input() maxBufferLength: number = 100;
 
+  private watchdogInterval: number;
+  private maxWatchdogInterval: number = 2000;
   private currentFrame: Telemetry;
-
+  private paused: boolean;
+  
   constructor(private telemetryService: TelemetryService) {
   }
 
@@ -22,8 +26,24 @@ export class TelemetryComponent implements OnInit {
     }
     else {
       this.telemetryService.connect('ws://localhost:8080');
-      TelemetryService.messages.subscribe(msg => this.currentFrame = msg );
-      console.log("Trying to connect...");}
+      TelemetryService.messages.subscribe(msg => this.onFrameReceived(msg));
+    }
+  }
+
+  public get isConnected() {
+    return this.telemetryService.isConnected;
+  }
+  
+  private onFrameReceived(frame) {
+    this.currentFrame = frame
+  }
+
+  public pause() : void {
+    this.paused = true;
+  }
+
+  public unpause() : void {
+    this.paused = false;
   }
 
   ngOnInit() { 

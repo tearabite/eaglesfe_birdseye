@@ -1,12 +1,6 @@
 [
     {
-        "name": "Relic Recovery",
-        "season": 2017,
-        "models": [
-            {
-                "path": "birdseye_viewer_relic_recovery/non_existent_model.glb"
-            }
-    ]
+        "name": "Empty Field"
     },
     {
         "name": "Rover Ruckus",

@@ -5,7 +5,9 @@
     </mat-panel-title>
   </mat-expansion-panel-header>
   <div class="container">
-    <button mat-stroked-button (click)=onConnectDisconnectClicked()>
+    <button mat-stroked-button 
+            (click)=onConnectDisconnectClicked() 
+            [ngClass]="{ connected: isConnected, disconnected: isConnected == false }">
       <mat-icon>compare_arrows</mat-icon>
     </button>
     <button mat-stroked-button>
@@ -13,9 +15,9 @@
     </button>
   </div>
   <div class="container">
-    <ngx-codemirror 
-    #raw [ngModel]="currentFrame | json" 
-    [options]="{ mode: { name: 'javascript', json: true } }">
+    <ngx-codemirror #raw 
+                    [ngModel]="currentFrame | json" 
+                    [options]="{ mode: { name: 'javascript', json: true } }">
   </ngx-codemirror>
   </div>
 </mat-expansion-panel>

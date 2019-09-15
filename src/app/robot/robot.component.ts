@@ -13,7 +13,7 @@ export class RobotComponent implements OnInit {
   private proxiedObject: Object3D;
   public model = new Subject<Object3D>();
 
-  constructor() {
+  constructor(private telemetryService: TelemetryService) {
     TelemetryService.messages.subscribe(msg => this.update(msg), error => {
       console.log(error);
     });
