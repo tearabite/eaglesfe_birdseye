@@ -25,10 +25,11 @@
              <mat-error *ngIf="port.invalid">{{getErrorMessage(port)}}</mat-error>
     </mat-form-field>
   </div>
-  <div class="container">
+  <div class="container code">
     <ngx-codemirror #raw 
                     [ngModel]="currentFrame | json" 
-                    [options]="{ mode: { name: 'javascript', json: true } }">
+                    [options]="{ mode: { name: 'javascript', json: true }, theme: 'darcula' }"
+                    [preserveScrollPosition]="true">
   </ngx-codemirror>
   </div>
 </mat-expansion-panel>
