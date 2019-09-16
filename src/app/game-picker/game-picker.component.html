@@ -1,9 +1,18 @@
-<mat-select #picker name="games" (selectionChange)="onSelectedGameChanged($event)" placeholder="Select a game">
-  <mat-option *ngFor="let game of games" [value]="game">
-    <p>{{game.name}}</p>
-  </mat-option>
-</mat-select>
 
-<mat-option *ngFor="let food of foods" [value]="food.value">
-  {{food.viewValue}}
-</mat-option>
+<form>
+  <mat-form-field>
+    <mat-label>Game</mat-label>
+    <mat-select #picker name="games" (selectionChange)="onSelectedGameChanged($event)" placeholder="Select a game">
+      <mat-option *ngFor="let game of games" [value]="game">
+        <p>{{game.name}}</p>
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <section class="axes-section">
+    <h4>Axis Helpers</h4>
+    <mat-checkbox #robotAxes class="axes-option" [checked]="this.preferencesServices.set('robotAxes', robotAxes.checked)">Robot Axes</mat-checkbox>
+    <mat-checkbox #fieldAxes class="axes-option" [checked]="this.preferencesServices.set('fieldAxes', fieldAxes.checked)">Field Axes</mat-checkbox>
+  </section>
+
+</form>
+
