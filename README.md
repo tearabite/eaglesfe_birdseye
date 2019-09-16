@@ -10,17 +10,6 @@ The foremost function of Birdseye Viewer is to provide the user with a 3D render
 
 Below is a quick reference for the JSON data the Birdseye Viewer consumes. For basic functionality, only keys *x* and *y* are strictly necessary. These represent the position of the robot on the field. Optionally, *z* can also be provided to raise the robot off the field. *Pitch, Roll*, and *Heading* are also correctly reflected in the rendering. However, none of these inputs are required.
 
-`birdseye`
-==
-
-| Name     | Type     |
-| -------- | -------- |
-| birdseye | `object` |
-
-The top level object for all data which birdseye-viewer accepts and handles natively.
-
-_Note: Arbitrary JSON data may safely be included as a child or as a sibling of this object._
-
 `robot`
 ==
 
@@ -28,16 +17,14 @@ _Note: Arbitrary JSON data may safely be included as a child or as a sibling of 
 | ----- | -------- |
 | robot | `object` |
 
-The `birdseye.robot` object holds all information which should affect the manner in which the 3D model of the robot is rendered. This currently includes one child object which describes the position of the robot relative to the field and it's orientation in space.
+The `robot` object holds all information which should affect the manner in which the 3D model of the robot is rendered. This currently includes one child object which describes the position of the robot relative to the field and it's orientation in space.
 
 _Example_
 
-```json
+```js
 {
-    "birdseye": {
-        "robot": {
-            // robot information
-        }
+    "robot": {
+        // robot information
     }
 }
 ```
@@ -45,20 +32,20 @@ _Example_
 `position`
 ==
 
-| Name  | Type     |
-| ----- | -------- |
+| Name     | Type     |
+| -------- | -------- |
 | position | `object` |
 
 The robots position as rendered in BirdseyeViewer is determined by an object with the `robot` in the telemetry payload. The object may contain all or some of the fields described below.
 
-| Key     | Type    | Range      | Description                                                                           |
-| ------- | ------- | ---------- | ------------------------------------------------------------------------------------- |
-| x       | number  | -144,144   | The X position of the robot relative to the field's coordinate plane.                 |
-| y       | number. | -144,144.  | The Y position of the robot relative to the field's coordinate plane.                 |
-| z       | number  | 0,Infinity | The Z position of the robot relative to the field's coordinate plane.                 |
-| pitch   | number  | -180,180   | The rotation of the robot around the X axis of its own coordinate plane.              |
-| roll    | number  | -180,180   | The rotation of the robot around the Y axis of its own coordinate plane.              |
-| heading | number  | -180,180   | The rotation of the robot around the Z axis relative to the field's coordinate plane. |
+| Key     | Type    | Required     | Range      | Description                                                                           |
+| ------- | ------- | ------------ | ---------- | ------------------------------------------------------------------------------------- |
+| x       | number  | **required** | -144,144   | The X position of the robot relative to the field's coordinate plane.                 |
+| y       | number. | **required** | -144,144.  | The Y position of the robot relative to the field's coordinate plane.                 |
+| z       | number  | *optional*   | 0,Infinity | The Z position of the robot relative to the field's coordinate plane.                 |
+| pitch   | number  | *optional*   | -180,180   | The rotation of the robot around the X axis of its own coordinate plane.              |
+| roll    | number  | *optional*   | -180,180   | The rotation of the robot around the Y axis of its own coordinate plane.              |
+| heading | number  | *optional*   | -180,180   | The rotation of the robot around the Z axis relative to the field's coordinate plane. |
 
 _Example_
 
@@ -99,7 +86,7 @@ _Example_
 
 Draw three target indicators. One at `[40, 60, 0]` relative to the robot, another at `[40, 60, 0]` relative to the field, and a third and final one at `[-40, -10, 5]` relative to the field and rendered in red.
 
-```json
+```js
 {
     "targets": [
         { "x": 40, "y": 60 },
