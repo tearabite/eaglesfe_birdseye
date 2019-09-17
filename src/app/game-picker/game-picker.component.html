@@ -1,18 +1,25 @@
-
 <form>
-  <mat-form-field>
-    <mat-label>Game</mat-label>
-    <mat-select #picker name="games" (selectionChange)="onSelectedGameChanged($event)" placeholder="Select a game">
-      <mat-option *ngFor="let game of games" [value]="game">
-        <p>{{game.name}}</p>
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-  <section class="axes-section">
-    <h4>Axis Helpers</h4>
-    <mat-checkbox #robotAxes class="axes-option" [checked]="this.preferencesServices.set('robotAxes', robotAxes.checked)">Robot Axes</mat-checkbox>
-    <mat-checkbox #fieldAxes class="axes-option" [checked]="this.preferencesServices.set('fieldAxes', fieldAxes.checked)">Field Axes</mat-checkbox>
+  <section>
+    <h4>Scene</h4>
+    <mat-form-field>
+      <mat-label>Game</mat-label>
+      <mat-select #picker name="games" (selectionChange)="onSelectedGameChanged($event)" placeholder="Select a game">
+        <mat-option *ngFor="let game of games" [value]="game">
+          <p>{{game.name}}</p>
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <br>
+    <mat-label>Maximum FPS</mat-label>
+    <mat-slider #maxFps class="fps-option"
+      [thumbLabel]="true" [step]="5" [min]="5" (change)="this.preferencesService.set('maxFps', maxFps.value)"></mat-slider>
   </section>
 
+  <section class="axes-section">
+    <h4>Axis Helpers</h4>
+    <mat-checkbox #robotAxes class="axes-option"
+      [checked]="this.preferencesService.set('robotAxes', robotAxes.checked)">Robot Axes</mat-checkbox>
+    <mat-checkbox #fieldAxes class="axes-option"
+      [checked]="this.preferencesService.set('fieldAxes', fieldAxes.checked)">Field Axes</mat-checkbox>
+  </section>
 </form>
-

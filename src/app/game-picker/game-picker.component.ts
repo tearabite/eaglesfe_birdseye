@@ -11,7 +11,7 @@ import { PreferencesService } from '../preferences.service';
 export class GamePickerComponent implements OnInit {
   private games: Array<Game>;
 
-  constructor(private gameProvider: GameProviderService, private preferencesServices: PreferencesService) {
+  constructor(private gameProvider: GameProviderService, private preferencesService: PreferencesService) {
     gameProvider.getGamesList().subscribe((games: Array<Game>) => this.games = games);
   }
 

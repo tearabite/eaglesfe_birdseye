@@ -17,6 +17,7 @@ export class SceneComponent implements AfterViewInit {
   @Input() lightColor: string | number | THREE.Color = '#444444';
   @Input() shadowsEnabled: boolean = true;
   @Input() antialiasEnabled: boolean = true;
+  @Input() maxFps: number = 60;
 
   @ViewChild('canvas') canvasRef: ElementRef
   @ViewChild(RobotComponent) robot: RobotComponent;
@@ -66,12 +67,15 @@ export class SceneComponent implements AfterViewInit {
   }
   onPreferencesChanged(prefs) {
     this.axes = prefs.fieldAxes;
+    this.maxFps = prefs.maxFps;
   }
 
   private startRenderingLoop() {
     let component: SceneComponent = this;
     (function render() {
-      requestAnimationFrame(render);
+      setTimeout(() => {
+        requestAnimationFrame(render);
+      }, 1000 / component.maxFps);
       component.renderer.render(component.scene, component.camera);
     }());
   }

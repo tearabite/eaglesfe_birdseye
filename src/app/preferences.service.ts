@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 export class Preferences {
   robotAxes: boolean = false;
   fieldAxes: boolean = false;
+  maxFps: number = 60;
 }
 @Injectable({
   providedIn: 'root'
