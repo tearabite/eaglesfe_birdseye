@@ -15,7 +15,7 @@ import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MatProgressBarModule } from '@angular/material/progress-bar'
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatIconModule } from '@angular/material/icon';
@@ -24,6 +24,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatListModule } from '@angular/material/list';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+
+import { AngularFireModule } from '@angular/fire';
 
 import { HttpClientModule } from '@angular/common/http';
 
@@ -31,6 +34,10 @@ import 'codemirror/mode/javascript/javascript';
 import 'hammerjs';
 import { GamePickerComponent } from './game-picker/game-picker.component';
 import { RobotComponent } from './robot/robot.component';
+import { RecorderComponent } from './recorder/recorder.component';
+import { environment } from 'src/environments/environment';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { from } from 'rxjs';
 
 @NgModule({
   declarations: [
@@ -41,10 +48,12 @@ import { RobotComponent } from './robot/robot.component';
     SceneComponent,
     GamePickerComponent,
     RobotComponent,
+    RecorderComponent,
   ],
   imports: [
     FormsModule,
     BrowserModule,
+    AngularFireModule.initializeApp(environment.firebase),
     AppRoutingModule,
     FontAwesomeModule,
     CodemirrorModule,
@@ -59,9 +68,10 @@ import { RobotComponent } from './robot/robot.component';
     MatListModule,
     MatRadioModule,
     HttpClientModule,
-    MatSelectModule
+    MatSelectModule,
+    MatButtonModule,
   ],
-  providers: [],
+  providers: [AngularFirestore],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

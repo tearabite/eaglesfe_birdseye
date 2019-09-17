@@ -14,10 +14,10 @@ export class TelemetryComponent implements OnInit {
   private currentFrame: Telemetry;
 
   constructor(private telemetryService: TelemetryService) {
-    this.telemetryService.messages.subscribe(msg => this.currentFrame = msg );
+    this.telemetryService.messages.subscribe(msg => this.currentFrame = msg);
     this.telemetryService.messages.subscribe(m => console.log(m));
   }
 
-  ngOnInit() { 
+  ngOnInit() {
   }
 }
