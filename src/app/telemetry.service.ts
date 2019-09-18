@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Subject } from "rxjs";
 import { webSocket, WebSocketSubject } from "rxjs/webSocket";
+import { throttleTime } from 'rxjs/operators';
 
 export class Telemetry {
   dt?: (other: Telemetry) => number;
@@ -17,7 +18,7 @@ export class Telemetry {
   targets?: { x: Number; y: Number; z?: Number; relativeTo?: "robot" | "field"; }[];
   other?: any;
 }
- 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -25,6 +26,7 @@ export class TelemetryService {
   private ws : WebSocketSubject<unknown>;
   public static messages: Subject<Telemetry> = new Subject<Telemetry>();;
   public currentFrame: Telemetry;
+  private maxMessageRate: number = 10; // Only process 10 frames per second
 
   constructor() {
     console.log("New instance of telemetry service created");
@@ -39,9 +41,9 @@ export class TelemetryService {
       return;
     }
     this.ws = webSocket(url);
-    this.ws.subscribe(
-      (frame) => this.onFrameReceived(frame), 
-      (error) => this.onConnectionError(error), 
+    this.ws.pipe(throttleTime(1000 / this.maxMessageRate)).subscribe(
+      (frame) => this.onFrameReceived(frame),
+      (error) => this.onConnectionError(error),
       () => this.onConnectionClosed());
   }
 
