@@ -4,6 +4,7 @@ import { Object3D, Vector3 } from 'three';
 import { Subject, timer } from 'rxjs';
 import { ThreeHelpers } from '../util/threehelpers';
 import * as THREE from 'three';
+import { PreferencesService, Preferences } from '../preferences.service';
 
 @Component({
   selector: 'app-robot',
@@ -13,14 +14,24 @@ export class RobotComponent implements OnInit {
   private proxiedObject: Object3D;
   public model = new Subject<Object3D>();
 
-  constructor(private telemetryService: TelemetryService) {
+  constructor(private telemetryService: TelemetryService, private preferencesService: PreferencesService) {
     TelemetryService.messages.subscribe(msg => this.update(msg), error => {
       console.log(error);
     });
+
+    this.model.subscribe(model => this.onModelLoaded(model));
   }
 
   ngOnInit() {
     this.initializeRobotModel();
+  }
+
+  onModelLoaded(model: Object3D) {
+    this.preferencesService.preferences.subscribe(preferences => this.onPreferencesChanged(preferences));
+  }
+
+  onPreferencesChanged(preferences : Preferences) {
+    this.axes = preferences.robotAxes;
   }
 
   private update(frame) {
@@ -40,7 +51,7 @@ export class RobotComponent implements OnInit {
     that.proxiedObject.position.setX(x);
     that.proxiedObject.position.setY(y);
     that.proxiedObject.position.setZ(z);
-    
+
     that.proxiedObject.rotation.setFromVector3(new Vector3(
       THREE.Math.degToRad(roll),
       THREE.Math.degToRad(pitch),
@@ -58,10 +69,26 @@ export class RobotComponent implements OnInit {
     robot.rotation.set(0,0,0);
     robot.scale.set(1,1,1);
     robot.updateMatrix();
-  
+
     robot.castShadow = true;
     robot.receiveShadow = true
     this.proxiedObject = robot;
     this.model.next(this.proxiedObject);
+  }
+
+  set axes(value: boolean) {
+    let axes = this.proxiedObject.getObjectByName("robotAxes");
+    if (value === true) {
+        if (axes === undefined) {
+            axes = new THREE.AxesHelper(72);
+            axes.name = "robotAxes";
+            this.proxiedObject.add(axes);
+        }
+        axes.visible = true;
+    } else {
+        if (axes !== undefined) {
+            axes.visible = false;
+        }
+    }
   }
 }

@@ -36,7 +36,7 @@ var i = 0;
 function generateTelemtry() {
     const r = 60;
 
-    i = (i + 0.01) % (2 * Math.PI);
+    i = (i + 0.05) % (2 * Math.PI);
     ideg = (i * 180 / Math.PI)
     const x = r * Math.cos(i);
     const y = r * Math.sin(i);
@@ -54,4 +54,4 @@ var send = () => {
     socket.broadcast(JSON.stringify(generateTelemtry()));
 };
 
-setInterval(send, 1000/60);
+setInterval(send, 1000/10);

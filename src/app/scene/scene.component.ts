@@ -6,6 +6,7 @@ import { Object3D } from 'three';
 import { GameProviderService, Game } from '../gameprovider.service';
 import { ThreeHelpers } from '../util/threehelpers';
 import { RobotComponent } from '../robot/robot.component';
+import { PreferencesService } from '../preferences.service';
 
 @Component({
   selector: 'app-scene',
@@ -16,6 +17,7 @@ export class SceneComponent implements AfterViewInit {
   @Input() lightColor: string | number | THREE.Color = '#444444';
   @Input() shadowsEnabled: boolean = true;
   @Input() antialiasEnabled: boolean = true;
+  @Input() maxFps: number = 60;
 
   @ViewChild('canvas') canvasRef: ElementRef
   @ViewChild(RobotComponent) robot: RobotComponent;
@@ -28,7 +30,7 @@ export class SceneComponent implements AfterViewInit {
   private robotModelId: number;
   private fieldRotationVector = new THREE.Vector3(THREE.Math.degToRad(90), THREE.Math.degToRad(-90), 0);
 
-  constructor(private gameProvider: GameProviderService) {
+  constructor(private gameProvider: GameProviderService, private preferencesService: PreferencesService) {
     gameProvider.current.subscribe(async (game: Game) => {
       // If we already have game models, remove each of them from the scene first.
       if (this.gameModelIds) {
@@ -55,17 +57,25 @@ export class SceneComponent implements AfterViewInit {
     await this.initializeScene();
     this.initializeControls();
 
+    this.preferencesService.preferences.subscribe(prefs => this.onPreferencesChanged(prefs));
+
     this.robot.model.subscribe((model) => {
       this.scene.add(model);
     });
 
     this.startRenderingLoop();
   }
+  onPreferencesChanged(prefs) {
+    this.axes = prefs.fieldAxes;
+    this.maxFps = prefs.maxFps;
+  }
 
   private startRenderingLoop() {
     let component: SceneComponent = this;
     (function render() {
-      requestAnimationFrame(render);
+      setTimeout(() => {
+        requestAnimationFrame(render);
+      }, 1000 / component.maxFps);
       component.renderer.render(component.scene, component.camera);
     }());
   }
@@ -144,5 +154,21 @@ export class SceneComponent implements AfterViewInit {
     field.rotation.setFromVector3(this.fieldRotationVector);
     field.up = ThreeHelpers.zAxis;
     this.scene.add(field);
+  }
+
+  set axes(value: boolean) {
+    let axes = this.scene.getObjectByName("fieldAxes");
+    if (value === true) {
+      if (axes === undefined) {
+        axes = new THREE.AxesHelper(200);
+        axes.name = "fieldAxes";
+        this.scene.add(axes);
+      }
+      axes.visible = true;
+    } else {
+      if (axes !== undefined) {
+        axes.visible = false;
+      }
+    }
   }
 }
