@@ -1,0 +1,44 @@
+.mat-stroked-button, button#mat-button-toggle-1-button {
+    height: 32px;
+    width: 48px;
+    line-height: inherit;
+    min-width: 24px;
+    padding: 0px;
+    background: white;
+    margin: 0px 5px 0px 0px;
+}
+
+.container {
+    width: unset;
+    padding-top: 5px;
+    padding-right: 10px;
+    padding-bottom: 0px;
+    padding-left: 10px;
+    border-color: #e0e0e0;
+    background: #f9f9f9;;
+    border-style: solid;
+    border-radius: 5px;
+    border-width: 1px;
+    margin-bottom: 5px;
+}
+
+.connected {
+    color: green;
+}
+
+.disconnected {
+    color: red;
+}
+
+.ipinput {
+    margin-left: 5px;
+    width: 50%;
+}
+
+.portinput {
+    width: 20%;
+}
+
+.code {
+    background: #2B2B2B
+}

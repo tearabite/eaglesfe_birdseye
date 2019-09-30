@@ -1,12 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { TelemetryComponent } from './telemetry/telemetry.component';
 import { MenuComponent } from './menu/menu.component';
-import { DebuggerComponent } from './debugger/debugger.component';
 import { SceneComponent } from './scene/scene.component';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -27,6 +26,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 
 import { AngularFireModule } from '@angular/fire';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { HttpClientModule } from '@angular/common/http';
 
@@ -44,7 +46,6 @@ import { from } from 'rxjs';
     AppComponent,
     TelemetryComponent,
     MenuComponent,
-    DebuggerComponent,
     SceneComponent,
     GamePickerComponent,
     RobotComponent,
@@ -52,6 +53,7 @@ import { from } from 'rxjs';
   ],
   imports: [
     FormsModule,
+    ReactiveFormsModule,
     BrowserModule,
     AngularFireModule.initializeApp(environment.firebase),
     AppRoutingModule,
@@ -70,6 +72,12 @@ import { from } from 'rxjs';
     HttpClientModule,
     MatSelectModule,
     MatButtonModule,
+<<<<<<< HEAD
+=======
+    MatTooltipModule,
+    MatInputModule,
+    MatFormFieldModule
+>>>>>>> angular
   ],
   providers: [AngularFirestore],
   bootstrap: [AppComponent]

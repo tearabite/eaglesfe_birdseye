@@ -1,12 +1,35 @@
-<div style="margin: auto; width: fit-content;">
-    <mat-button-toggle-group>
-    <mat-button-toggle value="raw" checked="true">
-      <mat-icon>code</mat-icon>
-    </mat-button-toggle>
-    <mat-button-toggle value="pretty">
-      <mat-icon>dns</mat-icon>
-    </mat-button-toggle>
-  </mat-button-toggle-group>
-</div>
-<ngx-codemirror #raw [ngModel]="currentFrame | json" [options]="{ mode: { name: 'javascript', json: true } }"></ngx-codemirror>
-<mat-progress-bar mode="determinate" [value]="bufferedTime"></mat-progress-bar>
+<mat-expansion-panel expanded="true">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      Telemetry
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <div class="container">
+    <button mat-stroked-button 
+            (click)=onConnectDisconnectClicked() 
+            [ngClass]="{ connected: isConnected, disconnected: isConnected == false }"
+            matTooltip="Connect or disconnect">
+      <mat-icon>compare_arrows</mat-icon>
+    </button>
+    
+    <mat-form-field class="ipinput" [floatLabel]="never">
+      <input matInput placeholder="IP Address"
+             matTooltip="The IP address of the robot"
+             [formControl]="host" required>
+      <mat-error *ngIf="host.invalid">{{getErrorMessage(host)}}</mat-error>
+    </mat-form-field>
+    <mat-form-field class="portinput">
+      <input matInput placeholder="Port"
+             matTooltip="The port the server is using"
+             [formControl]="port" required>
+             <mat-error *ngIf="port.invalid">{{getErrorMessage(port)}}</mat-error>
+    </mat-form-field>
+  </div>
+  <div class="container code">
+    <ngx-codemirror #raw 
+                    [ngModel]="currentFrame | json" 
+                    [options]="{ mode: { name: 'javascript', json: true }, theme: 'darcula' }"
+                    [preserveScrollPosition]="true">
+  </ngx-codemirror>
+  </div>
+</mat-expansion-panel>

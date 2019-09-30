@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Game, GameProviderService } from '../gameprovider.service';
 import { Observable, Subject } from 'rxjs';
+import { PreferencesService } from '../preferences.service';
 
 @Component({
   selector: 'app-game-picker',
@@ -10,7 +11,7 @@ import { Observable, Subject } from 'rxjs';
 export class GamePickerComponent implements OnInit {
   private games: Array<Game>;
 
-  constructor(private gameProvider: GameProviderService) {
+  constructor(private gameProvider: GameProviderService, private preferencesService: PreferencesService) {
     gameProvider.getGamesList().subscribe((games: Array<Game>) => this.games = games);
   }
 

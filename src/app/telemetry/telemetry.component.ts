@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { TelemetryService, Telemetry } from '../telemetry.service'
 import { CodemirrorComponent } from '@ctrl/ngx-codemirror'
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-telemetry',
@@ -12,10 +13,59 @@ export class TelemetryComponent implements OnInit {
   @Input() maxBufferLength: number = 100;
 
   private currentFrame: Telemetry;
+  private host = new FormControl('localhost', [Validators.pattern('(^localhost$|^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$)'), Validators.required]);
+  private port = new FormControl('3708', [Validators.pattern('^[0-9]+$'), Validators.required]);
 
   constructor(private telemetryService: TelemetryService) {
-    this.telemetryService.messages.subscribe(msg => this.currentFrame = msg);
-    this.telemetryService.messages.subscribe(m => console.log(m));
+    TelemetryService.messages.subscribe(msg => this.onFrameReceived(msg));
+  }
+
+  private onConnectDisconnectClicked() {
+    if (this.telemetryService.isConnected) {
+      this.telemetryService.disconnect();
+    }
+    else {
+      if (!(this.host.invalid || this.port.invalid)) {
+        let address = `ws://${this.host.value}:${this.port.value}`;
+        this.telemetryService.connect(address);
+      }
+    }
+  }
+
+  getErrorMessage(formInput) {
+    if (formInput === this.host) {
+      if (formInput.hasError('pattern')) {
+        return 'Invalid IP address.'
+      } else if (formInput.hasError('required')) {
+        return 'An IP is required';
+      }
+    }
+    if (formInput === this.port) {
+      if (formInput.hasError('pattern')) {
+        return 'Invalid port number.';
+      } else if (formInput.hasError('required')) {
+        return 'A port number is required';
+      }
+    }
+  }
+
+  public get isConnected() {
+    const isConnected = this.telemetryService.isConnected;
+    // I do not like what I am about to do (do work in a getter)
+    // but I do not yet know the proper way to do what I want.
+    if (isConnected) {
+      this.host.disable();
+      this.port.disable();
+    }
+    else {
+      this.host.enable();
+      this.port.enable();
+    }
+    return this.telemetryService.isConnected;
+  }
+
+  private onFrameReceived(frame) {
+    this.currentFrame = frame
   }
 
   ngOnInit() {

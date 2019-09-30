@@ -1,28 +1,13 @@
 <div class="menu" (mousedown)="onDrag($event)">
   <mat-accordion [multi]="true">
+    <app-telemetry [maxBufferLength]="40"></app-telemetry>
     <mat-expansion-panel expanded="false">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          Telemetry
+          Options
         </mat-panel-title>
       </mat-expansion-panel-header>
-      <app-telemetry [maxBufferLength]="40"></app-telemetry>
-    </mat-expansion-panel>
-    <mat-expansion-panel expanded="false">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Debugger
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <app-debugger></app-debugger>
-    </mat-expansion-panel>
-    <mat-expansion-panel expanded="true">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Recorder
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <app-recorder></app-recorder>
+      <app-game-picker></app-game-picker>
     </mat-expansion-panel>
   </mat-accordion>
 </div>

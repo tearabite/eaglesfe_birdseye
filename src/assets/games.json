@@ -1,12 +1,6 @@
 [
     {
-        "name": "Relic Recovery",
-        "season": 2017,
-        "models": [
-            {
-                "path": "birdseye_viewer_relic_recovery/non_existent_model.glb"
-            }
-    ]
+        "name": "Empty Field"
     },
     {
         "name": "Rover Ruckus",
@@ -14,7 +8,18 @@
         "models": [
             {
                 "path": "birdseye_viewer_rover_ruckus/static_1819_rover_ruckus.glb",
-                "rotation": [ 90, 0, 0],
+                "rotation": [ 90, -90, 0],
+                "translation": [ 0, 0, 0 ]
+            }
+        ]
+    },
+    {
+        "name": "Skystone",
+        "season": 2019,
+        "models": [
+            {
+                "path": "birdseye_viewer_skystone/static_1920_skystone.glb",
+                "rotation": [ 90, -90, 0],
                 "translation": [ 0, 0, 0 ]
             }
         ]

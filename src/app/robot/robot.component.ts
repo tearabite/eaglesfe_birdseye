@@ -4,25 +4,39 @@ import { Object3D, Vector3 } from 'three';
 import { Subject, timer } from 'rxjs';
 import { ThreeHelpers } from '../util/threehelpers';
 import * as THREE from 'three';
+import { PreferencesService, Preferences } from '../preferences.service';
 
 @Component({
   selector: 'app-robot',
-  template: ''
+  template: '',
 })
 export class RobotComponent implements OnInit {
   private proxiedObject: Object3D;
   public model = new Subject<Object3D>();
-  constructor(private telemetryService: TelemetryService) {
-    this.telemetryService.messages.subscribe(m => this.update(m));
+
+  constructor(private telemetryService: TelemetryService, private preferencesService: PreferencesService) {
+    TelemetryService.messages.subscribe(msg => this.update(msg), error => {
+      console.log(error);
+    });
+
+    this.model.subscribe(model => this.onModelLoaded(model));
   }
 
   ngOnInit() {
     this.initializeRobotModel();
   }
 
+  onModelLoaded(model: Object3D) {
+    this.preferencesService.preferences.subscribe(preferences => this.onPreferencesChanged(preferences));
+  }
+
+  onPreferencesChanged(preferences : Preferences) {
+    this.axes = preferences.robotAxes;
+  }
+
   private update(frame) {
     let that = this;
-    if (!frame || !frame.robot) {
+    if (!frame || !frame.robot || !that.proxiedObject) {
       return;
     }
     let robot = frame.robot;
@@ -33,7 +47,6 @@ export class RobotComponent implements OnInit {
     const pitch = (robot.pitch || that.proxiedObject.rotation.y || 0) as number;
     const roll = (robot.roll || that.proxiedObject.rotation.x || 0) as number;
     const heading = (robot.heading || that.proxiedObject.rotation.z || 0) as number;
-
 
     that.proxiedObject.position.setX(x);
     that.proxiedObject.position.setY(y);
@@ -56,10 +69,26 @@ export class RobotComponent implements OnInit {
     robot.rotation.set(0,0,0);
     robot.scale.set(1,1,1);
     robot.updateMatrix();
-  
+
     robot.castShadow = true;
     robot.receiveShadow = true
     this.proxiedObject = robot;
     this.model.next(this.proxiedObject);
+  }
+
+  set axes(value: boolean) {
+    let axes = this.proxiedObject.getObjectByName("robotAxes");
+    if (value === true) {
+        if (axes === undefined) {
+            axes = new THREE.AxesHelper(72);
+            axes.name = "robotAxes";
+            this.proxiedObject.add(axes);
+        }
+        axes.visible = true;
+    } else {
+        if (axes !== undefined) {
+            axes.visible = false;
+        }
+    }
   }
 }
