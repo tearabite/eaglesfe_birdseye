@@ -1,5 +1,6 @@
 <div class="div">
   <mat-checkbox #simulateEnabled (change)="onRecord()">Record</mat-checkbox>
-  <p *ngIf="this.recording">recording: {{ this.allFrames.length }}</p>
-  <p *ngIf="!this.recording">recorded for: {{ this.recordTime }}</p>
+  <p *ngIf="this.recording">frames: {{ this.allFrames.length }}</p>
+  <p *ngIf="!this.recording">frames recorded: {{ this.allFrames.length }}</p>
+  <button (pressed)="onSend()">Send</button>
 </div>

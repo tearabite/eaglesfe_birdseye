@@ -11,12 +11,17 @@ import { timestamp } from 'rxjs/operators';
 export class RecorderComponent implements OnInit {
 
   private currentFrame: Telemetry;
-  public allFrames = [];
+  public allFrames: Telemetry[] = [];
   private recording: boolean = false;
+
   constructor(private telemetryService: TelemetryService, private firebaseService: FirebaseService) {
   }
 
   ngOnInit() {
+  }
+
+  onSend() {
+    this.firebaseService.addTelemetry(this.allFrames);
   }
 
   onRecord() {
@@ -24,7 +29,7 @@ export class RecorderComponent implements OnInit {
     if (this.recording) {
       this.telemetryService.messages.subscribe(m => this.allFrames.push(m));
     } else {
-
+      this.telemetryService.messages.unsubscribe();
     }
 
   }

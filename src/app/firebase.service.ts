@@ -30,7 +30,7 @@ export class FirebaseService {
     return this.telemetry;
   }
 
-  addTelemetry(telemetry: Telemetry) {
+  addTelemetry(telemetry) {
     this.telemetryCollection.add(telemetry);
   }
 
