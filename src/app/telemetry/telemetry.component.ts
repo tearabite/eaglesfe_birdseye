@@ -17,7 +17,6 @@ export class TelemetryComponent implements OnInit {
   private port = new FormControl('3708', [Validators.pattern('^[0-9]+$'), Validators.required]);
 
   constructor(private telemetryService: TelemetryService) {
-    TelemetryService.messages.subscribe(msg => this.onFrameReceived(msg));
   }
 
   private onConnectDisconnectClicked() {
@@ -69,5 +68,6 @@ export class TelemetryComponent implements OnInit {
   }
 
   ngOnInit() {
+    TelemetryService.messages.subscribe(msg => this.onFrameReceived(msg));
   }
 }

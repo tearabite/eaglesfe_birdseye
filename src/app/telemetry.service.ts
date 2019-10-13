@@ -23,7 +23,7 @@ export class Telemetry {
   providedIn: 'root'
 })
 export class TelemetryService {
-  private ws : WebSocketSubject<unknown>;
+  private ws: WebSocketSubject<unknown>;
   public static messages: Subject<Telemetry> = new Subject<Telemetry>();;
   public currentFrame: Telemetry;
   private maxMessageRate: number = 10; // Only process 10 frames per second
@@ -32,7 +32,7 @@ export class TelemetryService {
     console.log("New instance of telemetry service created");
   }
 
-  public send (object: any) {
+  public send(object: any) {
     this.ws.next(object);
   }
 
@@ -54,22 +54,22 @@ export class TelemetryService {
     }
   }
 
-  public get isConnected() : boolean {
+  public get isConnected(): boolean {
     return this.ws != null && this.ws != undefined;
   }
 
-  private onFrameReceived(frame) : void {
+  private onFrameReceived(frame): void {
     if (frame as Telemetry && TelemetryService.messages) {
       TelemetryService.messages.next(frame as Telemetry)
     }
   }
 
-  private onConnectionError(error) : void {
+  private onConnectionError(error): void {
     this.ws.complete();
     this.ws = null;
   }
 
-  private onConnectionClosed() : void {
+  private onConnectionClosed(): void {
     console.log("disconnected");
   }
 }

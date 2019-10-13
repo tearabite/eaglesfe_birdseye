@@ -72,12 +72,9 @@ import { from } from 'rxjs';
     HttpClientModule,
     MatSelectModule,
     MatButtonModule,
-<<<<<<< HEAD
-=======
     MatTooltipModule,
     MatInputModule,
     MatFormFieldModule
->>>>>>> angular
   ],
   providers: [AngularFirestore],
   bootstrap: [AppComponent]

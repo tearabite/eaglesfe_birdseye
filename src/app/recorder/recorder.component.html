@@ -1,6 +1,19 @@
-<div class="div">
-  <mat-checkbox #simulateEnabled (change)="onRecord()">Record</mat-checkbox>
-  <p *ngIf="this.recording">frames: {{ this.allFrames.length }}</p>
-  <p *ngIf="!this.recording">frames recorded: {{ this.allFrames.length }}</p>
-  <button (pressed)="onSend()">Send</button>
+<div class="div" *ngIf="SaveName == null; else named">
+  <form [formGroup]="form">
+    <mat-form-field>
+      <input matInput placeholder="recording name" formControlName='recordingName'>
+      <mat-error *ngIf="recordingName.invalid && recordingName.touched">
+        Please enter a recording name
+      </mat-error>
+    </mat-form-field>
+  </form>
+  <button mat-raised-button [disabled]="form.invalid">Create</button>
 </div>
+<ng-template #named>
+  <div class="div">
+    <mat-checkbox #simulateEnabled (change)="onRecord()">Record</mat-checkbox>
+    <p *ngIf="this.recording">frames: {{ this.allFrames.length }}</p>
+    <p *ngIf="!this.recording">frames recorded: {{ this.allFrames.length }}</p>
+    <button (pressed)="onSend()">Send</button>
+  </div>
+</ng-template>
